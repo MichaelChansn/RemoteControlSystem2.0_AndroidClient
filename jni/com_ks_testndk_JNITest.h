@@ -27,17 +27,17 @@ JNIEXPORT void JNICALL Java_com_ks_testndk_JNITest_finsh
  * Class:     com_ks_testndk_JNITest
  * Method:    add
  * Signature: (II)I
- */
+
 JNIEXPORT jint JNICALL Java_com_ks_testndk_JNITest_add
-  (JNIEnv *, jobject, jint, jint);
+  (JNIEnv *, jobject, jint, jint);*/
 
 /*
  * Class:     com_ks_testndk_JNITest
  * Method:    getHello
  * Signature: ()Ljava/lang/String;
- */
+
 JNIEXPORT jstring JNICALL Java_com_ks_testndk_JNITest_getHello
-  (JNIEnv *, jobject);
+  (JNIEnv *, jobject); */
 
 /*
  * Class:     com_ks_testndk_JNITest

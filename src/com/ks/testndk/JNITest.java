@@ -6,8 +6,9 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 
 public class JNITest {
+	/*
 	public native int add(int a,int b);
-	public native String getHello();
+	public native String getHello();*/
 	/**返回一张新的图片，是globalbtm 的副本*/
 	private native Bitmap getBitmapNew(int[] points,Bitmap globalBtm,Bitmap lastFrame);
 	 /**在原来的图像上处理，处理结果绘制到globalBtm上*/

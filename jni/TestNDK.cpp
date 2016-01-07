@@ -8,6 +8,7 @@
 #define  LOG_TAG    "Applog"
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
 #define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+/*
 JNIEXPORT jint JNICALL Java_com_ks_testndk_JNITest_add(JNIEnv * jniEnv, jobject jObject, jint num1, jint num2)
 {
 	jint result=num1+num2;
@@ -16,7 +17,7 @@ JNIEXPORT jint JNICALL Java_com_ks_testndk_JNITest_add(JNIEnv * jniEnv, jobject 
 JNIEXPORT jstring JNICALL Java_com_ks_testndk_JNITest_getHello(JNIEnv * jniEnv, jobject jObject)
 {
 	return jniEnv->NewStringUTF("hello world");
-}
+}*/
 
 static  jclass bitmapCls =NULL;
 static  jmethodID createBitmapFunction =NULL;
