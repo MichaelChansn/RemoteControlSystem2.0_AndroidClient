@@ -10,6 +10,8 @@ import android.os.Handler;
 
 public class NetConnectThread extends Thread {
 	
+	private String IP;
+	private int port;
 	private Handler handler;
 	private SocketAddress skAddress;
 	private TcpNet tcpNet;
@@ -18,7 +20,8 @@ public class NetConnectThread extends Thread {
 	{
 		this.handler=handler;
 		this.tcpNet=tcpNet;
-		skAddress=new InetSocketAddress(IP, port);
+		this.IP=IP;
+		this.port=port;
 	}
 
 	@Override
@@ -26,15 +29,28 @@ public class NetConnectThread extends Thread {
 		// TODO Auto-generated method stub
 		super.run();
 		try {
+			skAddress=new InetSocketAddress(IP, port);
 			handler.sendEmptyMessage(NUMCODES.NETSTATE.CONNECTING.getValue());
-			tcpNet.connect2Server(skAddress, 0);
-			handler.sendEmptyMessage(NUMCODES.NETSTATE.CONNECTOK.getValue());
+			tcpNet.connect2Server(skAddress, 5000);
 		} catch (NetExceptions e) {
 			// TODO Auto-generated catch block
-			handler.sendEmptyMessage(NUMCODES.NETSTATE.CONNECTFAILE.getValue());
 			e.printStackTrace();
 			FileLogger.getLogger().write(e.getMessage());
-			throw new RuntimeException(e.getMessage());
+			String error=e.getMessage();
+			if(error.contains("ms"))
+			{
+				handler.sendEmptyMessage(NUMCODES.NETSTATE.CONNECTTIMEOUT.getValue());
+			}
+			else
+			{
+				handler.sendEmptyMessage(NUMCODES.NETSTATE.CONNECTFAILE.getValue());
+			}
+		}
+		catch (Exception e) {//IP和端口输入不符合规范
+			// TODO: handle exception
+			e.printStackTrace();
+			FileLogger.getLogger().write(e.getMessage());
+			handler.sendEmptyMessage(NUMCODES.NETSTATE.CONNECTFAILE.getValue());
 		}
 		
 	}

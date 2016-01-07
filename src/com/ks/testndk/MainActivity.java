@@ -116,16 +116,10 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				try{
 				tcpNet=TcpNet.getInstance();
 				String IP=edIP.getText().toString();
 				int port=Integer.valueOf(edPort.getText().toString());
-				new NetConnectThread(tcpNet, IP, port, handler);
-				}
-				catch(RuntimeException e)
-				{
-					
-				}
+				new NetConnectThread(tcpNet, IP, port, handler).start();
 			}
 		});
 		
@@ -174,11 +168,37 @@ public class MainActivity extends Activity {
 				Toast.makeText(theActivity, "连接成功", Toast.LENGTH_SHORT).show();
 				break;
 			case CONNECTFAILE:
+				if(((MainActivity)theActivity).dialog!=null)
+				{
+					((MainActivity)theActivity).dialog.dismiss();
+					((MainActivity)theActivity).dialog=null;
+				}
 				new AlertDialog
 				 .Builder(theActivity)
 				 .setIcon(android.R.drawable.stat_notify_error)
 				 .setTitle("连接错误！")
 				 .setMessage("请检查网络和IP地址是否输入错误！")
+				 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						dialog.dismiss();
+					
+					}
+				}).create().show();
+				break;
+			case CONNECTTIMEOUT:
+				if(((MainActivity)theActivity).dialog!=null)
+				{
+					((MainActivity)theActivity).dialog.dismiss();
+					((MainActivity)theActivity).dialog=null;
+				}
+				new AlertDialog
+				 .Builder(theActivity)
+				 .setIcon(android.R.drawable.stat_notify_error)
+				 .setTitle("连接超时！")
+				 .setMessage("网络貌似不通畅，稍后再试！")
 				 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
 					
 					@Override

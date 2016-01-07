@@ -28,11 +28,7 @@
 							</builder>
 							<tool id="com.android.gcc.compiler.460089674" name="Android GCC Compiler" superClass="com.android.gcc.compiler">
 								<option id="com.android.gcc.option.includePath.2099572817" superClass="com.android.gcc.option.includePath" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;D:\android-sdk-ndk\android-ndk-r10e\platforms\android-21\arch-arm\usr\include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;D:\android-sdk-ndk\android-ndk-r10e\sources\cxx-stl\system\include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;D:\android-sdk-ndk\android-ndk-r10e\toolchains\arm-linux-androideabi-4.8\prebuilt\windows\lib\gcc\arm-linux-androideabi\4.8\include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;D:\android-sdk-ndk\android-ndk-r10e\toolchains\arm-linux-androideabi-4.8\prebuilt\windows\lib\gcc\arm-linux-androideabi\4.8\include-fixed&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;D:\android-sdk-ndk\android-ndk-r10e\sources\android\support\include&quot;"/>
+									<listOptionValue builtIn="false" value="/Users/KS/Documents/Android_sdk_ndk_mosx/android-ndk-r10e/platforms/android-21/arch-arm/usr/include"/>
 								</option>
 								<inputType id="com.android.gcc.inputType.110915042" superClass="com.android.gcc.inputType"/>
 							</tool>
@@ -57,9 +53,8 @@
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.android.AndroidPerProjectProfile"/>
 		</scannerConfigBuildInfo>
 	</storageModule>
-	<storageModule moduleId="refreshScope" versionNumber="2">
-		<configuration configurationName="Default">
-			<resource resourceType="PROJECT" workspacePath="/MainActivity"/>
-		</configuration>
+	<storageModule moduleId="refreshScope" versionNumber="1">
+		<resource resourceType="PROJECT" workspacePath="/MainActivity"/>
 	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 </cproject>

@@ -1,5 +1,6 @@
 package com.ks.myexceptions;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -23,7 +24,8 @@ public class FileLogger {
 				{
 					loger=new FileLogger();
 					try {
-						logFile=new PrintStream(new FileOutputStream(LOGEPATH, true));
+						String path=android.os.Environment.getExternalStorageDirectory().getPath();
+						logFile=new PrintStream(new FileOutputStream(path+File.separator+LOGEPATH, true));
 						isInitFileOK=true;
 					} catch (FileNotFoundException e) {
 						// TODO Auto-generated catch block
@@ -39,7 +41,7 @@ public class FileLogger {
 	{
 		if(isInitFileOK)
 		{
-			logFile.println(new Date().toString()+log);
+			logFile.println(new Date().toString()+"-->"+log);
 		}
 		else
 		{
