@@ -1,0 +1,1 @@
+NDK 安装和注意事项：http://blog.csdn.net/kangsenkangsen/article/details/50459295
