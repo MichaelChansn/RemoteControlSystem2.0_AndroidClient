@@ -27,27 +27,36 @@ public class ReceiveThread extends Thread {
 			Recpacket recpacket = new Recpacket();
 			try {
 
-				int btmByteLen=conventSmall2Big(tcpNet.getInputStream().readInt());
-				BitmapType type=BitmapType.getBitmapType(tcpNet.getInputStream().readByte());
-				short cursorX=conventSmall2Big(tcpNet.getInputStream().readShort());
-				short cursorY=conventSmall2Big(tcpNet.getInputStream().readShort());
-				short difNums=conventSmall2Big(tcpNet.getInputStream().readShort());
-				if (difNums > 0)
-                 {
-                     List<ShortRec> difPoints = new ArrayList<ShortRec>();
-                     for (int i = 0; i < difNums; i++)
-                     {
-                         short xpoint = conventSmall2Big(tcpNet.getInputStream().readShort());
-                         short ypoint = conventSmall2Big(tcpNet.getInputStream().readShort());
-                         short width =  conventSmall2Big(tcpNet.getInputStream().readShort());
-                         short height = conventSmall2Big(tcpNet.getInputStream().readShort());
-                         ShortRec difPoint = new ShortRec(xpoint, ypoint,width,height);
-                         difPoints.add(difPoint);
+				int btmByteLen = conventSmall2Big(tcpNet.getInputStream().readInt());
+				BitmapType type = BitmapType.getBitmapType(tcpNet.getInputStream().readByte());
+				short cursorX = conventSmall2Big(tcpNet.getInputStream().readShort());
+				short cursorY = conventSmall2Big(tcpNet.getInputStream().readShort());
+				short difNums = conventSmall2Big(tcpNet.getInputStream().readShort());
+				if (difNums > 0) {
+					List<ShortRec> difPoints = new ArrayList<ShortRec>();
+					for (int i = 0; i < difNums; i++) {
+						short xpoint = conventSmall2Big(tcpNet.getInputStream().readShort());
+						short ypoint = conventSmall2Big(tcpNet.getInputStream().readShort());
+						short width = conventSmall2Big(tcpNet.getInputStream().readShort());
+						short height = conventSmall2Big(tcpNet.getInputStream().readShort());
+						ShortRec difPoint = new ShortRec(xpoint, ypoint, width, height);
+						difPoints.add(difPoint);
 
-                     }
-                     recpacket.setDifPointsList(difPoints);
-
-                 }
+					}
+					recpacket.setDifPointsList(difPoints);
+				}
+				byte[] btmBytes = new byte[btmByteLen];
+				int lenget = 0;
+				while (lenget < btmByteLen) {
+					try {
+						lenget += tcpNet.getInputStream().read(btmBytes, lenget, btmByteLen - lenget);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						FileLogger.getLogger().write(e.getMessage());
+						tcpNet.disConnect();
+					}
+				}
 				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
