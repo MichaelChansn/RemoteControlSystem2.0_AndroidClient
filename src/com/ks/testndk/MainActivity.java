@@ -3,10 +3,17 @@ package com.ks.testndk;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import com.ks.net.NUMCODES.NETSTATE;
 import com.ks.net.NetConnectThread;
 import com.ks.net.TcpNet;
+import com.ks.streamline.BitmapWithCursor;
+import com.ks.streamline.DecompressThread;
+import com.ks.streamline.ReceiveThread;
+import com.ks.streamline.RecoverAndDisplayThread;
+import com.ks.streamline.Recpacket;
+import com.ks.streamline.ShortRec;
 import com.ks.tests.LZOTest;
 
 import android.app.Activity;
@@ -36,11 +43,17 @@ public class MainActivity extends Activity {
 	private EditText edIP;
 	private EditText edPort;
 	private JNITest jNITest;
-	private ImageView ivShow;
+	public  ImageView ivShow;
 	private Matrix matrix=new Matrix();
 	private TcpNet tcpNet;
 	private MyHandler handler;
 	private ProgressDialog dialog;
+	private Thread recThread;
+	private Thread decompreThread;
+	private Thread showThread;
+	private LinkedBlockingQueue<Recpacket> recPacketQueue;
+	private LinkedBlockingQueue<BitmapWithCursor> difBtmQueue;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -57,6 +70,8 @@ public class MainActivity extends Activity {
 		ivShow=(ImageView)findViewById(R.id.imageViewShow);
 		jNITest=new JNITest();
 		handler=new MyHandler(this);
+		recPacketQueue=new LinkedBlockingQueue<Recpacket>(10);
+		difBtmQueue=new LinkedBlockingQueue<BitmapWithCursor>(10);
 	}
 	private void inits()
 	{
@@ -69,10 +84,10 @@ public class MainActivity extends Activity {
 				btm1.eraseColor(Color.GREEN);
 				Bitmap btm2=Bitmap.createBitmap(1920, 1080, Config.ARGB_8888);
 				btm2.eraseColor(Color.BLUE);
-				List<Rect> res=new ArrayList<Rect>();
+				List<ShortRec> res=new ArrayList<ShortRec>();
 				for(int i=0;i<1000;i++)
 				{
-					Rect r=new Rect(i, i, 30+i,30+i);
+					ShortRec r=new ShortRec(i, i, 30+i,30+i);
 					res.add(r);
 				}
 				long start=System.nanoTime();
@@ -122,6 +137,7 @@ public class MainActivity extends Activity {
 				String IP=edIP.getText().toString();
 				int port=Integer.valueOf(edPort.getText().toString());
 				new NetConnectThread(tcpNet, IP, port, handler).start();
+				
 			}
 		});
 		
@@ -130,13 +146,17 @@ public class MainActivity extends Activity {
 	
 	
 	/**自定义handler 采用弱引用，防止内存泄露*/
-	static class MyHandler extends Handler {  
+	public  class MyHandler extends Handler {  
         WeakReference<Activity> mActivity;  
         
         MyHandler(Activity activity) {  
                 mActivity = new WeakReference<Activity>(activity);  
         }  
 
+        public Activity getContext()
+        {
+        	return mActivity.get();
+        }
         @Override
 		public void handleMessage(Message msg) 
 		{
@@ -168,6 +188,7 @@ public class MainActivity extends Activity {
 					((MainActivity)theActivity).dialog=null;
 				}
 				Toast.makeText(theActivity, "连接成功", Toast.LENGTH_SHORT).show();
+				initThreads(tcpNet,recPacketQueue,difBtmQueue,handler);
 				break;
 			case CONNECTFAILE:
 				if(((MainActivity)theActivity).dialog!=null)
@@ -218,6 +239,20 @@ public class MainActivity extends Activity {
 			
 		}
 }  
+	
+	
+	private void initThreads(TcpNet tcpNet,LinkedBlockingQueue<Recpacket> recPacketQueue,LinkedBlockingQueue<BitmapWithCursor> difBtmQueue,MyHandler handler)
+	{
+		recThread=new ReceiveThread(tcpNet, recPacketQueue);
+		decompreThread=new DecompressThread(tcpNet, recPacketQueue, difBtmQueue);
+		showThread=new RecoverAndDisplayThread(tcpNet, handler, difBtmQueue, null);
+		recThread.setDaemon(true);
+		decompreThread.setDaemon(true);
+		showThread.setDaemon(true);
+		recThread.start();
+		decompreThread.start();
+		showThread.start();
+	}
 
 	@Override
 	protected void onDestroy() {

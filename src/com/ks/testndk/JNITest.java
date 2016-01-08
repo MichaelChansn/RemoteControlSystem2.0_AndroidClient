@@ -3,6 +3,7 @@ package com.ks.testndk;
 import java.util.List;
 
 import com.ks.myexceptions.FileLogger;
+import com.ks.streamline.ShortRec;
 
 import android.graphics.Bitmap;
 import android.graphics.Rect;
@@ -28,7 +29,7 @@ public class JNITest {
 	/**对 {@link #getBitmapNew(int[], Bitmap, Bitmap)}的封装，用于根据isUsingNew来决定是否使用次函数
 	 * 若没有启用isUsingNew会返回null
 	 *  */
-	public Bitmap getBitmapNewBtm(List<Rect> rects,Bitmap globalBtm,Bitmap lastFrame)
+	public Bitmap getBitmapNewBtm(List<ShortRec> rects,Bitmap globalBtm,Bitmap lastFrame)
 	{
 		Bitmap retBtm=null;
 		if(isUsingNew)
@@ -38,21 +39,21 @@ public class JNITest {
 		}
 		return retBtm;
 	}
-	public void getBitmapOrlBtm(List<Rect> rects,Bitmap globalBtm,Bitmap lastFrame)
+	public void getBitmapOrlBtm(List<ShortRec> rects,Bitmap globalBtm,Bitmap lastFrame)
 	{
 		int[] points=conventList2intArray(rects);
 		getBitmapOrl(points,globalBtm,lastFrame);
 	}
-	private int[] conventList2intArray(List<Rect> res)
+	private int[] conventList2intArray(List<ShortRec> res)
 	{
 		int len=res.size();
 		int[] ret=new int[len*4];
 		for(int i=0;i<len;i++)
 		{
-				ret[0+i*4]=res.get(i).left;
-				ret[1+i*4]=res.get(i).top;
-				ret[2+i*4]=res.get(i).width();
-				ret[3+i*4]=res.get(i).height();
+				ret[0+i*4]=res.get(i).xPoint;
+				ret[1+i*4]=res.get(i).yPoint;
+				ret[2+i*4]=res.get(i).width;
+				ret[3+i*4]=res.get(i).height;
 		}
 		return ret;
 	}

@@ -15,6 +15,8 @@ public class ReceiveThread extends Thread {
 	private TcpNet tcpNet;
 
 	public ReceiveThread(TcpNet tcpNet, LinkedBlockingQueue<Recpacket> recPacketQueue) {
+		if(tcpNet==null | recPacketQueue==null)
+			throw new RuntimeException("ReceiveThread constructor params can not be null");
 		this.tcpNet = tcpNet;
 		this.recPacketQueue = recPacketQueue;
 	}
@@ -58,7 +60,21 @@ public class ReceiveThread extends Thread {
 					}
 				}
 				
+				/**组装数据*/
+                recpacket.setBitByts(btmBytes);
+                recpacket.setBitmapBytesLength(btmByteLen);
+                recpacket.setBitmapType(type);
+                recpacket.setCursorPoint(new ShortPoint(cursorX, cursorY));
+                //MessageBox.Show(getBitmapBytes.Length+"");
+                /**添加到接收队列*/
+                recPacketQueue.put(recpacket);
+
 			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				FileLogger.getLogger().write(e.getMessage());
+				tcpNet.disConnect();
+			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				FileLogger.getLogger().write(e.getMessage());
