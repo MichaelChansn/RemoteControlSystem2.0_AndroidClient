@@ -88,7 +88,7 @@ public class MainActivity extends Activity {
 				List<ShortRec> res=new ArrayList<ShortRec>();
 				for(int i=0;i<1000;i++)
 				{
-					ShortRec r=new ShortRec(i, i, 30+i,30+i);
+					ShortRec r=new ShortRec(i, i, 30,30);
 					res.add(r);
 				}
 				long start=System.nanoTime();
