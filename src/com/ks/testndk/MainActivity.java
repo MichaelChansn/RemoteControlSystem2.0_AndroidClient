@@ -45,14 +45,15 @@ public class MainActivity extends Activity {
 	private JNITest jNITest;
 	public  ImageView ivShow;
 	private Matrix matrix=new Matrix();
-	private TcpNet tcpNet;
-	private MyHandler handler;
+	private static TcpNet tcpNet;
+	private static MyHandler handler;
 	private ProgressDialog dialog;
-	private Thread recThread;
-	private Thread decompreThread;
-	private Thread showThread;
-	private LinkedBlockingQueue<Recpacket> recPacketQueue;
-	private LinkedBlockingQueue<BitmapWithCursor> difBtmQueue;
+	private static Thread recThread;
+	private static Thread decompreThread;
+	private static Thread showThread;
+	private static LinkedBlockingQueue<Recpacket> recPacketQueue;
+	private static LinkedBlockingQueue<BitmapWithCursor> difBtmQueue;
+	private Runnable showRun;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -140,16 +141,24 @@ public class MainActivity extends Activity {
 				
 			}
 		});
+		showRun=new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				initThreads(tcpNet,recPacketQueue,difBtmQueue,handler);
+			}
+		};
 		
 	}
 
 	
 	
 	/**自定义handler 采用弱引用，防止内存泄露*/
-	public  class MyHandler extends Handler {  
-        WeakReference<Activity> mActivity;  
+	public static class MyHandler extends Handler {  
+       private WeakReference<Activity> mActivity;  
         
-        MyHandler(Activity activity) {  
+       public  MyHandler(Activity activity) {  
                 mActivity = new WeakReference<Activity>(activity);  
         }  
 
@@ -241,7 +250,7 @@ public class MainActivity extends Activity {
 }  
 	
 	
-	private void initThreads(TcpNet tcpNet,LinkedBlockingQueue<Recpacket> recPacketQueue,LinkedBlockingQueue<BitmapWithCursor> difBtmQueue,MyHandler handler)
+	private static void initThreads(TcpNet tcpNet,LinkedBlockingQueue<Recpacket> recPacketQueue,LinkedBlockingQueue<BitmapWithCursor> difBtmQueue,MyHandler handler)
 	{
 		recThread=new ReceiveThread(tcpNet, recPacketQueue);
 		decompreThread=new DecompressThread(tcpNet, recPacketQueue, difBtmQueue);
