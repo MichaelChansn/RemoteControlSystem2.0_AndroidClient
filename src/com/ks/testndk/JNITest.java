@@ -2,6 +2,8 @@ package com.ks.testndk;
 
 import java.util.List;
 
+import com.ks.myexceptions.FileLogger;
+
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 
@@ -56,6 +58,13 @@ public class JNITest {
 	}
 	static{
 		/**lib的前缀后缀都不能加libTestNDK.so,只要写TestNDK就ok*/
+		try{
 		System.loadLibrary("TestNDK");
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			FileLogger.getLogger().write(e.getMessage());
+		}
 	}
 }

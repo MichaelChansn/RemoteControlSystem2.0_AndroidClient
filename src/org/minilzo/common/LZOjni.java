@@ -26,21 +26,16 @@
  */
 package org.minilzo.common;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Date;
+import com.ks.myexceptions.FileLogger;
 
 public class LZOjni {
-	
+	/*
 	private static final String LIB_BIN = "/dll/";
 	
 	private final static String LIBRARYNAME = "lzojni";
 	
 	private final static String DEPENDENT = "libgcc_s_dw2-1";
-	/*
+	
 	static {
 		System.out.println("LZO Loading DLL/Library");
 		
@@ -53,12 +48,8 @@ public class LZOjni {
 		}
 		
 		loadLib(LIBRARYNAME,true);
-	}*/
-	static{
-		System.out.println("load..................");
-		System.loadLibrary("LZOjni");
-		
 	}
+	
 
 	private static void loadLib(String iName, boolean archi) {
 		
@@ -97,7 +88,7 @@ public class LZOjni {
 	// To switch from a DLL to an other
 	private static String getTempDir(){
 		if ("Linux".equals(getOperating())) {
-			return "/storage/emulated/0"+File.separator+"tmp";
+			return android.os.Environment.getExternalStorageDirectory().getPath()+File.separator+"tmp";
 			//return System.getProperty("user.home")+"/tmp";
 		}
 		return System.getProperty("java.io.tmpdir");
@@ -106,18 +97,18 @@ public class LZOjni {
 	/**
 	 * When packaged into JAR extracts DLLs, places these into
 	 * @throws Exception 
-	 */
+	 *
 	private static void loadFromJar(String iName) throws Exception {
 		// we need to put both DLLs to temp dir
 		String path = "LZOJNI_" + new Date().getTime();
 		loadLib(path, iName );
 
-	}
+	}*/
 
-	/**
+	/*
 	 * Puts library to temp dir and loads to memory
 	 * @throws Exception 
-	 */
+	 *
 	private static void loadLib(String path, String name) throws Exception {
 		
 		if ("Linux".equals(getOperating())) {
@@ -164,8 +155,20 @@ public class LZOjni {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}*/
+	static{
+		try{
+		System.out.println("loadLibrary..................");
+		System.loadLibrary("LZOjni");
+		System.out.println("loadLibrary OK...............");
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			FileLogger.getLogger().write(e.getMessage());
+		}
+		
 	}
-	
 	
 	// Our Native method
 	public native int LZOCompress(final byte[] in, int iLen, byte[] out, int[] ioOutlen);

@@ -1,40 +1,28 @@
 package com.ks.tests;
 
+import java.io.ByteArrayOutputStream;
+
 import org.minilzo.common.LZOjni;
+
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 
 public class LZOTest {
 	public static void testLZO()
 	{
-
-		String aString = new String("ABCABCABCABCABCAB C'est super de compresser des donnees");
+		Bitmap btm=Bitmap.createBitmap(1920, 1080, Config.ARGB_8888);
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		btm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+		byte[] jpegBytes=baos.toByteArray();
 		
-		byte[] aDataIn = aString.getBytes();
-		byte[] aDataOut = new byte[1024];
-		int[] outsize = new int[1];
-		
-		int result = (new LZOjni()).LZOCompress(aDataIn, aDataIn.length, aDataOut, outsize);
-		
-		System.out.println("Input Length "+aDataIn.length);
-		System.out.println("Finished "+result);
-		System.out.println("OutputSize "+outsize[0]);
-		for (int i=0; i<1024; i++) {
-			System.out.printf("%d",aDataOut[i]);
-		}
-		System.out.println();
-		
-		byte[] aDataOut2 = new byte[1024];
-		
-		int out = outsize[0];
-		outsize[0] = 1024; // Set available output size
-		result = (new LZOjni()).LZODecompress(aDataOut, out, aDataOut2, outsize);
-		
-		System.out.println("Finished Decompress "+result);
-		System.out.println("OutputSize "+outsize[0]);
-		for (int i=0; i<1024; i++) {
-			System.out.printf("%d",aDataOut2[i]);
-		}
-		System.out.println();
-		String aData = new String(aDataOut2);
-		System.out.println(aData);
+		byte[] outPutBytes=new byte[200*1024];
+		int[] lzoSize=new int[1];
+		/**返回0表示成功，其他表示失败*/
+		int result = (new LZOjni()).LZOCompress(jpegBytes, jpegBytes.length, outPutBytes, lzoSize);
+		System.out.println("Finsh:"+result+" size before compress:"+jpegBytes.length+" size after  compress:"+lzoSize[0]);
+		byte[] buffer=new byte[200*1024];
+		int beforeSize=lzoSize[0];
+		result = (new LZOjni()).LZODecompress(outPutBytes, beforeSize, buffer, lzoSize);
+		System.out.println("Finsh:"+result+" size before decompress:"+beforeSize+" size after decompress:"+lzoSize[0]);
 	}
 }

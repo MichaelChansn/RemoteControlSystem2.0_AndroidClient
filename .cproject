@@ -27,12 +27,7 @@
 								</outputEntries>
 							</builder>
 							<tool id="com.android.gcc.compiler.460089674" name="Android GCC Compiler" superClass="com.android.gcc.compiler">
-								<option id="com.android.gcc.option.includePath.2099572817" superClass="com.android.gcc.option.includePath" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;D:\android-sdk-ndk\android-ndk-r10e\platforms\android-21\arch-arm\usr\include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;D:\android-sdk-ndk\android-ndk-r10e\sources\cxx-stl\system\include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;D:\android-sdk-ndk\android-ndk-r10e\toolchains\arm-linux-androideabi-4.8\prebuilt\windows\lib\gcc\arm-linux-androideabi\4.8\include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;D:\android-sdk-ndk\android-ndk-r10e\toolchains\arm-linux-androideabi-4.8\prebuilt\windows\lib\gcc\arm-linux-androideabi\4.8\include-fixed&quot;"/>
-								</option>
+								<option id="com.android.gcc.option.includePath.2099572817" superClass="com.android.gcc.option.includePath" valueType="includePath"/>
 								<inputType id="com.android.gcc.inputType.110915042" superClass="com.android.gcc.inputType"/>
 							</tool>
 						</toolChain>
