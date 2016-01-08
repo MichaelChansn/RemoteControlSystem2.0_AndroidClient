@@ -22,7 +22,8 @@ public class LZOTest {
 		System.out.println("Finsh:"+result+" size before compress:"+jpegBytes.length+" size after  compress:"+lzoSize[0]);
 		byte[] buffer=new byte[200*1024];
 		int beforeSize=lzoSize[0];
-		result = (new LZOjni()).LZODecompress(outPutBytes, beforeSize, buffer, lzoSize);
-		System.out.println("Finsh:"+result+" size before decompress:"+beforeSize+" size after decompress:"+lzoSize[0]);
+		int[] lzoSize2=new int[1];
+		result = (new LZOjni()).LZODecompress(outPutBytes, beforeSize, buffer, lzoSize2);
+		System.out.println("Finsh:"+result+" size before decompress:"+beforeSize+" size after decompress:"+lzoSize2[0]);
 	}
 }
