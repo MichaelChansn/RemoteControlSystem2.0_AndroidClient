@@ -1,9 +1,8 @@
-obj/local/armeabi/objs/TestNDK/TestNDK.o: jni/TestNDK.cpp \
+obj/local/armeabi/objs/LZOjni/LZOjni.o: jni/LZOjni.c \
  D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/jni.h \
  D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/sys/cdefs.h \
  D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/sys/cdefs_elf.h \
  D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/android/api-level.h \
- D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/android/log.h \
  D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/stdio.h \
  D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/sys/types.h \
  D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/stdint.h \
@@ -20,37 +19,19 @@ obj/local/armeabi/objs/TestNDK/TestNDK.o: jni/TestNDK.cpp \
  D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/asm/posix_types.h \
  D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/asm-generic/posix_types.h \
  D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/sys/sysmacros.h \
- D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/android/bitmap.h \
- D:/android-sdk-ndk/android-ndk-r10e/sources/cxx-stl/system/include/cstring \
- D:/android-sdk-ndk/android-ndk-r10e/sources/cxx-stl/system/include/cstddef \
+ D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/stdlib.h \
  D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/string.h \
  D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/malloc.h \
  D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/xlocale.h \
- D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/unistd.h \
- D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/sys/select.h \
- D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/sys/time.h \
- D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/linux/time.h \
- D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/signal.h \
- D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/errno.h \
- D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/linux/errno.h \
- D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/asm/errno.h \
- D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/asm-generic/errno.h \
- D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/asm-generic/errno-base.h \
+ D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/alloca.h \
+ D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/strings.h \
+ D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/memory.h \
+ jni/minilzo.h jni/lzoconf.h \
  D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/limits.h \
  D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/sys/limits.h \
  D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/linux/limits.h \
  D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/sys/syslimits.h \
- D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/asm/sigcontext.h \
- D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/linux/signal.h \
- D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/asm/signal.h \
- D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/asm-generic/signal-defs.h \
- D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/asm/siginfo.h \
- D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/asm-generic/siginfo.h \
- D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/sys/ucontext.h \
- D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/sys/user.h \
- D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/sys/sysconf.h \
- D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/pathconf.h \
- jni/com_ks_testndk_JNItest.h
+ jni/lzodefs.h jni/lzoconf.h jni/lzodefs.h jni/LZOjni.h
 
 D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/jni.h:
 
@@ -59,8 +40,6 @@ D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/sy
 D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/sys/cdefs_elf.h:
 
 D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/android/api-level.h:
-
-D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/android/log.h:
 
 D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/stdio.h:
 
@@ -94,11 +73,7 @@ D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/as
 
 D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/sys/sysmacros.h:
 
-D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/android/bitmap.h:
-
-D:/android-sdk-ndk/android-ndk-r10e/sources/cxx-stl/system/include/cstring:
-
-D:/android-sdk-ndk/android-ndk-r10e/sources/cxx-stl/system/include/cstddef:
+D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/stdlib.h:
 
 D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/string.h:
 
@@ -106,25 +81,15 @@ D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/ma
 
 D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/xlocale.h:
 
-D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/unistd.h:
+D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/alloca.h:
 
-D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/sys/select.h:
+D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/strings.h:
 
-D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/sys/time.h:
+D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/memory.h:
 
-D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/linux/time.h:
+jni/minilzo.h:
 
-D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/signal.h:
-
-D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/errno.h:
-
-D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/linux/errno.h:
-
-D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/asm/errno.h:
-
-D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/asm-generic/errno.h:
-
-D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/asm-generic/errno-base.h:
+jni/lzoconf.h:
 
 D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/limits.h:
 
@@ -134,24 +99,10 @@ D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/li
 
 D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/sys/syslimits.h:
 
-D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/asm/sigcontext.h:
+jni/lzodefs.h:
 
-D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/linux/signal.h:
+jni/lzoconf.h:
 
-D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/asm/signal.h:
+jni/lzodefs.h:
 
-D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/asm-generic/signal-defs.h:
-
-D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/asm/siginfo.h:
-
-D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/asm-generic/siginfo.h:
-
-D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/sys/ucontext.h:
-
-D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/sys/user.h:
-
-D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/sys/sysconf.h:
-
-D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/pathconf.h:
-
-jni/com_ks_testndk_JNItest.h:
+jni/LZOjni.h:

@@ -7,6 +7,7 @@ import java.util.List;
 import com.ks.net.NUMCODES.NETSTATE;
 import com.ks.net.NetConnectThread;
 import com.ks.net.TcpNet;
+import com.ks.tests.LZOTest;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -109,6 +110,7 @@ public class MainActivity extends Activity {
 				ivShow.setImageBitmap(btm1);*/
 				
 				Toast.makeText(getApplication(), "time:"+(stop-start)/1000000+"ms", Toast.LENGTH_SHORT).show();
+				LZOTest.testLZO();
 			}
 		});
 		btnConnect.setOnClickListener(new OnClickListener() {
