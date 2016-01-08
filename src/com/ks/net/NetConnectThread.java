@@ -32,6 +32,7 @@ public class NetConnectThread extends Thread {
 			skAddress=new InetSocketAddress(IP, port);
 			handler.sendEmptyMessage(NUMCODES.NETSTATE.CONNECTING.getValue());
 			tcpNet.connect2Server(skAddress, 5000);
+			handler.sendEmptyMessage(NUMCODES.NETSTATE.CONNECTOK.getValue());
 		} catch (NetExceptions e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
