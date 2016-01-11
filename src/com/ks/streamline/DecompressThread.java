@@ -7,6 +7,7 @@ import org.minilzo.common.LZOjni;
 
 import com.ks.myexceptions.FileLogger;
 import com.ks.net.TcpNet;
+import com.ks.streamline.Recpacket.PacketType;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -37,18 +38,36 @@ public class DecompressThread extends Thread {
 			Recpacket rec=recPacketQueue.poll(200,TimeUnit.MILLISECONDS);
 			if(rec==null)
 				continue;
+			PacketType packetType=rec.getPacketType();
 			BitmapWithCursor difBtm=new BitmapWithCursor();
-			difBtm.setCursorPoint(rec.getCursorPoint());
-			difBtm.setType(rec.getBitmapType());
-			difBtm.setDifPointsList(rec.getDifPointsList());
-			byte[] dataBytes = rec.getBitByts();
-			int beforeSize=dataBytes.length;
-			int[] afterSize=new int[1];
-			byte[] deCompressBytes=new byte[512*1024];//512kb buffer
-			lzo.LZODecompress(dataBytes,beforeSize,deCompressBytes,afterSize);
-			Bitmap btm=BitmapFactory.decodeByteArray(deCompressBytes, 0, afterSize[0]);
-			difBtm.setDifBitmap(btm);
+			difBtm.setPacketType(packetType);
+			switch(packetType)
+			{
+			case BITMAP:
+				difBtm.setCursorPoint(rec.getCursorPoint());
+				difBtm.setType(rec.getBitmapType());
+				difBtm.setDifPointsList(rec.getDifPointsList());
+				byte[] dataBytes = rec.getBitByts();
+				int beforeSize=dataBytes.length;
+				int[] afterSize=new int[1];
+				byte[] deCompressBytes=new byte[512*1024];//512kb buffer
+				lzo.LZODecompress(dataBytes,beforeSize,deCompressBytes,afterSize);
+				//long start=System.nanoTime();
+				Bitmap btm=BitmapFactory.decodeByteArray(deCompressBytes, 0, afterSize[0]);
+				//long stop=System.nanoTime();
+				//System.out.println((stop-start)/1000000);
+				difBtm.setDifBitmap(btm);
 				difBtmQueue.put(difBtm);
+				break;
+			case TEXT:
+				difBtm.setStringValue(rec.getStringValue());
+				difBtmQueue.put(difBtm);
+				break;
+			default:
+				break;
+			
+			}
+			
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

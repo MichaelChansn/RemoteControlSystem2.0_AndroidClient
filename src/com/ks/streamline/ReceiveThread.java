@@ -1,6 +1,7 @@
 package com.ks.streamline;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -8,6 +9,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import com.ks.myexceptions.FileLogger;
 import com.ks.net.TcpNet;
 import com.ks.streamline.Recpacket.BitmapType;
+import com.ks.streamline.Recpacket.PacketType;
 
 public class ReceiveThread extends Thread {
 
@@ -15,7 +17,7 @@ public class ReceiveThread extends Thread {
 	private TcpNet tcpNet;
 
 	public ReceiveThread(TcpNet tcpNet, LinkedBlockingQueue<Recpacket> recPacketQueue) {
-		if(tcpNet==null | recPacketQueue==null)
+		if (tcpNet == null | recPacketQueue == null)
 			throw new RuntimeException("ReceiveThread constructor params can not be null");
 		this.tcpNet = tcpNet;
 		this.recPacketQueue = recPacketQueue;
@@ -29,45 +31,70 @@ public class ReceiveThread extends Thread {
 			Recpacket recpacket = new Recpacket();
 			try {
 
-				int btmByteLen = conventSmall2Big(tcpNet.getInputStream().readInt());
-				BitmapType type = BitmapType.getBitmapType(tcpNet.getInputStream().readByte());
-				short cursorX = conventSmall2Big(tcpNet.getInputStream().readShort());
-				short cursorY = conventSmall2Big(tcpNet.getInputStream().readShort());
-				short difNums = conventSmall2Big(tcpNet.getInputStream().readShort());
-				if (difNums > 0) {
-					List<ShortRec> difPoints = new ArrayList<ShortRec>();
-					for (int i = 0; i < difNums; i++) {
-						short xpoint = conventSmall2Big(tcpNet.getInputStream().readShort());
-						short ypoint = conventSmall2Big(tcpNet.getInputStream().readShort());
-						short width = conventSmall2Big(tcpNet.getInputStream().readShort());
-						short height = conventSmall2Big(tcpNet.getInputStream().readShort());
-						ShortRec difPoint = new ShortRec(xpoint, ypoint, width, height);
-						difPoints.add(difPoint);
+				PacketType packetType = PacketType.getPacketType(tcpNet.getInputStream().readByte());
+				recpacket.setPacketType(packetType);
+				switch (packetType) {
+				case BITMAP:
+					int btmByteLen = conventSmall2Big(tcpNet.getInputStream().readInt());
+					BitmapType type = BitmapType.getBitmapType(tcpNet.getInputStream().readByte());
+					short cursorX = conventSmall2Big(tcpNet.getInputStream().readShort());
+					short cursorY = conventSmall2Big(tcpNet.getInputStream().readShort());
+					short difNums = conventSmall2Big(tcpNet.getInputStream().readShort());
+					if (difNums > 0) {
+						List<ShortRec> difPoints = new ArrayList<ShortRec>();
+						for (int i = 0; i < difNums; i++) {
+							short xpoint = conventSmall2Big(tcpNet.getInputStream().readShort());
+							short ypoint = conventSmall2Big(tcpNet.getInputStream().readShort());
+							short width = conventSmall2Big(tcpNet.getInputStream().readShort());
+							short height = conventSmall2Big(tcpNet.getInputStream().readShort());
+							ShortRec difPoint = new ShortRec(xpoint, ypoint, width, height);
+							difPoints.add(difPoint);
 
+						}
+						recpacket.setDifPointsList(difPoints);
 					}
-					recpacket.setDifPointsList(difPoints);
-				}
-				byte[] btmBytes = new byte[btmByteLen];
-				int lenget = 0;
-				while (lenget < btmByteLen) {
-					try {
-						lenget += tcpNet.getInputStream().read(btmBytes, lenget, btmByteLen - lenget);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-						FileLogger.getLogger().write(e.getMessage());
-						tcpNet.disConnect();
+					byte[] btmBytes = new byte[btmByteLen];
+					int lenget = 0;
+					while (lenget < btmByteLen) {
+						try {
+							lenget += tcpNet.getInputStream().read(btmBytes, lenget, btmByteLen - lenget);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+							FileLogger.getLogger().write(e.getMessage());
+							tcpNet.disConnect();
+						}
 					}
+
+					/** 组装数据 */
+					recpacket.setBitByts(btmBytes);
+					recpacket.setBitmapBytesLength(btmByteLen);
+					recpacket.setBitmapType(type);
+					recpacket.setCursorPoint(new ShortPoint(cursorX, cursorY));
+					// MessageBox.Show(getBitmapBytes.Length+"");
+					/** 添加到接收队列 */
+					recPacketQueue.put(recpacket);
+					break;
+				case TEXT:
+					int textLen=conventSmall2Big(tcpNet.getInputStream().readInt());
+					byte[] textBytes = new byte[textLen];
+					int lentext = 0;
+					while (lentext < textLen) {
+						try {
+							lentext += tcpNet.getInputStream().read(textBytes, lentext, textLen - lentext);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+							FileLogger.getLogger().write(e.getMessage());
+							tcpNet.disConnect();
+						}
+					}
+					recpacket.setStringValue(new String(textBytes));//UTF-8
+					recPacketQueue.put(recpacket);
+					break;
+				default:
+					break;
 				}
-				
-				/**组装数据*/
-                recpacket.setBitByts(btmBytes);
-                recpacket.setBitmapBytesLength(btmByteLen);
-                recpacket.setBitmapType(type);
-                recpacket.setCursorPoint(new ShortPoint(cursorX, cursorY));
-                //MessageBox.Show(getBitmapBytes.Length+"");
-                /**添加到接收队列*/
-                recPacketQueue.put(recpacket);
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
