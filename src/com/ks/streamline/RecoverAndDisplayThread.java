@@ -4,13 +4,13 @@ import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import com.ks.activitys.MainActivity;
+import com.ks.activitys.MainActivity.MyHandler;
 import com.ks.myexceptions.FileLogger;
 import com.ks.net.TcpNet;
 import com.ks.streamline.Recpacket.BitmapType;
 import com.ks.streamline.Recpacket.PacketType;
-import com.ks.testndk.JNITest;
-import com.ks.testndk.MainActivity;
-import com.ks.testndk.MainActivity.MyHandler;
+import com.ks.testndk.JNIBtmProcess;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -22,7 +22,7 @@ public class RecoverAndDisplayThread extends Thread {
 	private TcpNet tcpNet;
 	private Bitmap globalBtm = null;
 	private Matrix matrix = new Matrix();
-	private JNITest jNITest = new JNITest();
+	private JNIBtmProcess jNITest = new JNIBtmProcess();
 
 	public RecoverAndDisplayThread(TcpNet tcpNet, MyHandler hander, LinkedBlockingQueue<BitmapWithCursor> difBtmQueue,
 			LinkedBlockingQueue<BitmapWithCursor> displayQueue) {

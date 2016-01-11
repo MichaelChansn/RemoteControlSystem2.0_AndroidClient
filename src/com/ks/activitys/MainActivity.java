@@ -1,4 +1,4 @@
-package com.ks.testndk;
+package com.ks.activitys;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -14,6 +14,10 @@ import com.ks.streamline.ReceiveThread;
 import com.ks.streamline.RecoverAndDisplayThread;
 import com.ks.streamline.Recpacket;
 import com.ks.streamline.ShortRec;
+import com.ks.testndk.JNIBtmProcess;
+import com.ks.testndk.R;
+import com.ks.testndk.R.id;
+import com.ks.testndk.R.layout;
 import com.ks.tests.LZOTest;
 
 import android.app.Activity;
@@ -42,7 +46,7 @@ public class MainActivity extends Activity {
 	private Button btnConnect;
 	private EditText edIP;
 	private EditText edPort;
-	private JNITest jNITest;
+	private JNIBtmProcess jNITest;
 	public  ImageView ivShow;
 	private Matrix matrix=new Matrix();
 	private static TcpNet tcpNet;
@@ -69,7 +73,7 @@ public class MainActivity extends Activity {
 		edIP=(EditText) findViewById(R.id.editTextIP);
 		edPort=(EditText) findViewById(R.id.editTextPort);
 		ivShow=(ImageView)findViewById(R.id.imageViewShow);
-		jNITest=new JNITest();
+		jNITest=new JNIBtmProcess();
 		handler=new MyHandler(this);
 		recPacketQueue=new LinkedBlockingQueue<Recpacket>(10);
 		difBtmQueue=new LinkedBlockingQueue<BitmapWithCursor>(10);

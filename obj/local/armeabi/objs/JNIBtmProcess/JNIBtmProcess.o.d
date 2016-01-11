@@ -1,4 +1,5 @@
-obj/local/armeabi/objs/TestNDK/TestNDK.o: jni/TestNDK.cpp \
+obj/local/armeabi/objs/JNIBtmProcess/JNIBtmProcess.o: \
+ jni/JNIBtmProcess.cpp jni/JNIBtmProcess.h \
  D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/jni.h \
  D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/sys/cdefs.h \
  D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/sys/cdefs_elf.h \
@@ -49,8 +50,9 @@ obj/local/armeabi/objs/TestNDK/TestNDK.o: jni/TestNDK.cpp \
  D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/sys/ucontext.h \
  D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/sys/user.h \
  D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/sys/sysconf.h \
- D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/pathconf.h \
- jni/com_ks_testndk_JNItest.h
+ D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/pathconf.h
+
+jni/JNIBtmProcess.h:
 
 D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/jni.h:
 
@@ -153,5 +155,3 @@ D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/sy
 D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/sys/sysconf.h:
 
 D:/android-sdk-ndk/android-ndk-r10e/platforms/android-21/arch-arm/usr/include/pathconf.h:
-
-jni/com_ks_testndk_JNItest.h:

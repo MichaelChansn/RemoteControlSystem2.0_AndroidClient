@@ -2,8 +2,8 @@
 #include <jni.h>
 /* Header for class com_ks_testndk_JNITest */
 
-#ifndef _Included_com_ks_testndk_JNITest
-#define _Included_com_ks_testndk_JNITest
+#ifndef _Included_com_ks_testndk_JNIBtmProcess
+#define _Included_com_ks_testndk_JNIBtmProcess
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -20,7 +20,7 @@ JNIEXPORT void JNICALL Java_com_ks_testndk_JNITest_inits
  * Method:    deleteGlobalRefs
  * Signature: ()v
  */
-JNIEXPORT void JNICALL Java_com_ks_testndk_JNITest_finsh
+JNIEXPORT void JNICALL Java_com_ks_testndk_JNIBtmProcess_finsh
   (JNIEnv *, jobject);
 
 /*
@@ -44,14 +44,14 @@ JNIEXPORT jstring JNICALL Java_com_ks_testndk_JNITest_getHello
  * Method:    getBitmap
  * Signature: ([ILandroid/graphics/Bitmap;Landroid/graphics/Bitmap;)Landroid/graphics/Bitmap;
  */
-JNIEXPORT jobject JNICALL Java_com_ks_testndk_JNITest_getBitmapNew
+JNIEXPORT jobject JNICALL Java_com_ks_testndk_JNIBtmProcess_getBitmapNew
   (JNIEnv *, jobject, jintArray, jobject, jobject);
 /*
  * Class:     com_ks_testndk_JNITest
  * Method:    getBitmap
  * Signature: ([ILandroid/graphics/Bitmap;Landroid/graphics/Bitmap;)v;
  */
-JNIEXPORT void JNICALL Java_com_ks_testndk_JNITest_getBitmapOrl
+JNIEXPORT void JNICALL Java_com_ks_testndk_JNIBtmProcess_getBitmapOrl
   (JNIEnv *, jobject, jintArray, jobject, jobject);
 
 #ifdef __cplusplus

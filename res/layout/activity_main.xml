@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/holo_blue_light"
-    tools:context="com.ks.testndk.MainActivity" >
+    tools:context="com.ks.activitys.MainActivity" >
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -60,7 +60,7 @@
             android:textSize="30sp" />
 
         <ScrollView
-            android:id="@+id/scrollView1"
+            android:id="@+id/scrollViewServerList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
 

@@ -2,8 +2,8 @@
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE    := TestNDK
-LOCAL_SRC_FILES := TestNDK.cpp
+LOCAL_MODULE    := JNIBtmProcess
+LOCAL_SRC_FILES := JNIBtmProcess.cpp
 LOCAL_LDLIBS := -llog
 LOCAL_LDFLAGS += -ljnigraphics
 

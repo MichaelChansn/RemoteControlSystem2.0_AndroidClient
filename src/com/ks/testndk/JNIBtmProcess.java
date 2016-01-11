@@ -6,9 +6,8 @@ import com.ks.myexceptions.FileLogger;
 import com.ks.streamline.ShortRec;
 
 import android.graphics.Bitmap;
-import android.graphics.Rect;
 
-public class JNITest {
+public class JNIBtmProcess {
 	/*
 	public native int add(int a,int b);
 	public native String getHello();*/
@@ -24,8 +23,8 @@ public class JNITest {
 	/**确定是都使用 {@link #getBitmapNew(int[], Bitmap, Bitmap)}函数，默认不使用 */
 	private boolean isUsingNew=false;
 	public void release(){if(isUsingNew){finsh();}}
-	public JNITest(){}
-	public JNITest(boolean isUsingNew){this.isUsingNew=isUsingNew;}
+	public JNIBtmProcess(){}
+	public JNIBtmProcess(boolean isUsingNew){this.isUsingNew=isUsingNew;}
 	/**对 {@link #getBitmapNew(int[], Bitmap, Bitmap)}的封装，用于根据isUsingNew来决定是否使用次函数
 	 * 若没有启用isUsingNew会返回null
 	 *  */
@@ -60,7 +59,7 @@ public class JNITest {
 	static{
 		/**lib的前缀后缀都不能加libTestNDK.so,只要写TestNDK就ok*/
 		try{
-		System.loadLibrary("TestNDK");
+		System.loadLibrary("JNIBtmProcess");
 		}
 		catch(Exception e)
 		{

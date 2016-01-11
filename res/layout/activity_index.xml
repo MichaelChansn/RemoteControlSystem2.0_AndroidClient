@@ -1,0 +1,84 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray"
+    android:fitsSystemWindows="true"
+    android:gravity="fill"
+    tools:context="com.ks.activitys.IndexActivity" >
+
+        <EditText
+            android:id="@+id/editTextServerIP"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="107dp"
+            android:ems="10"
+            android:hint="Server IP" >
+
+            <requestFocus />
+        </EditText>
+
+        <EditText
+            android:id="@+id/editTextServerPort"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="false"
+            android:layout_below="@+id/editTextServerIP"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:hint="Server Port"
+            android:inputType="number" />
+
+        <TextView
+            android:id="@+id/textViewIndexTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="57dp"
+            android:text="Server Address"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/freshred"
+            android:textSize="25sp" />
+
+        <Button
+            android:id="@+id/buttonConnectServer"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/buttonScanServer"
+            android:layout_alignBottom="@+id/buttonScanServer"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="13dp"
+            android:text="Connect Server" />
+
+        <Button
+            android:id="@+id/buttonScanServer"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/editTextServerPort"
+            android:layout_marginLeft="13dp"
+            android:layout_marginTop="15dp"
+            android:text="Scan Server" />
+
+        <ListView
+            android:id="@+id/listViewServerList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewServerOnline"
+            android:layout_marginTop="5dp" >
+        </ListView>
+
+        <TextView
+            android:id="@+id/textViewServerOnline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/buttonConnectServer"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:text="Server Online"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+</RelativeLayout>
