@@ -5,8 +5,10 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.concurrent.TimeoutException;
 
 import com.ks.activitys.IndexActivity.MyHandler;
 import com.ks.net.enums.MessageEnums;
@@ -37,6 +39,7 @@ public class UDPScanThread extends Thread {
 
 		try {
 			dgSocket = new DatagramSocket();
+			dgSocket.setSoTimeout(1000);
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -64,9 +67,9 @@ public class UDPScanThread extends Thread {
 			return;
 		}
 		long start = System.nanoTime();
-
+		System.out.println("****************");
 		/** scan for 5 seconds */
-		while (!isInterrupted() && (System.nanoTime() - start) / 1000000 < 500) {
+		while (!isInterrupted() && (System.nanoTime() - start) / 1000000 < 3000) {
 			byte data[] = new byte[512];
 			DatagramPacket packet = new DatagramPacket(data, data.length);
 			try {
@@ -74,7 +77,13 @@ public class UDPScanThread extends Thread {
 				String rec=new String(packet.getData(), packet.getOffset(), packet.getLength());
 				String server=rec.split( MessageEnums.NETSEPARATOR)[0]+" "+packet.getAddress().toString()+":"+rec.split( MessageEnums.NETSEPARATOR)[1];
 				servers.add(server);
-			} catch (IOException e) {
+			}
+			catch(SocketTimeoutException ex)
+			{
+				ex.printStackTrace();
+				continue;
+			}
+			catch (IOException e) {
 				e.printStackTrace();
 				if (dgSocket != null)
 					dgSocket.close();
@@ -85,7 +94,20 @@ public class UDPScanThread extends Thread {
 		if (dgSocket != null) {
 			dgSocket.close();
 		}
+		
 		if (!isInterrupted()) {
+			servers.add("test");
+			servers.add("haha");
+			servers.add("test");
+			servers.add("haha");
+			servers.add("test");
+			servers.add("haha");
+			servers.add("test");
+			servers.add("haha");
+			servers.add("test");
+			servers.add("haha");
+			servers.add("test");
+			servers.add("haha");
 			handler.sendEmptyMessage(NUMCODES.NETSTATE.UDPSCANOK.getValue());
 		}
 

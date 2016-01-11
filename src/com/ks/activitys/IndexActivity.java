@@ -52,7 +52,6 @@ public class IndexActivity extends Activity {
 		edServerPort = (EditText) findViewById(R.id.editTextServerPort);
 		servers = new ArrayList<String>();
 		handler = new MyHandler(IndexActivity.this);
-		udpScanThread = new UDPScanThread(servers, handler);
 	}
 
 	private void initFuns() {
@@ -73,13 +72,19 @@ public class IndexActivity extends Activity {
 					public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
 						if (keyCode == KeyEvent.KEYCODE_BACK) {
 							udpScanThread.stopUDP();
-							lvServerList.setAdapter(new ArrayAdapter<String>(IndexActivity.this,
-									android.R.layout.simple_list_item_1, (String[]) servers.toArray()));
+							if (servers.size() > 0) {
+								String[] lists = new String[servers.size()];
+								servers.toArray(lists);
+								lvServerList.setAdapter(new ArrayAdapter<String>(IndexActivity.this,
+										android.R.layout.simple_list_item_1, lists));
+							}
 							dialog.dismiss();
 						}
 						return false;
 					}
 				});
+				servers.clear();
+				udpScanThread = new UDPScanThread(servers, handler);
 				udpScanThread.start();
 
 				break;
@@ -110,12 +115,16 @@ public class IndexActivity extends Activity {
 				return;
 			switch (NETSTATE.getNETSTATEByValue(msg.what)) {
 			case UDPSCANOK:
-				if(((IndexActivity)theActivity).dialog!=null)
-				{
-					((IndexActivity)theActivity).dialog.dismiss();
-					((IndexActivity)theActivity).dialog=null;
-					((IndexActivity)theActivity).lvServerList.setAdapter(new ArrayAdapter<String>(((IndexActivity)theActivity),
-							android.R.layout.simple_list_item_1, (String[]) ((IndexActivity)theActivity).servers.toArray()));
+				if (((IndexActivity) theActivity).dialog != null) {
+					((IndexActivity) theActivity).dialog.dismiss();
+					((IndexActivity) theActivity).dialog = null;
+					if (((IndexActivity) theActivity).servers.size() > 0) {
+						String[] lists=new String[(((IndexActivity) theActivity).servers.size())];
+						((IndexActivity) theActivity).servers.toArray(lists);
+						((IndexActivity) theActivity).lvServerList.setAdapter(new ArrayAdapter<String>(
+								((IndexActivity) theActivity), android.R.layout.simple_list_item_1,
+								lists));
+					}
 				}
 				break;
 			default:
