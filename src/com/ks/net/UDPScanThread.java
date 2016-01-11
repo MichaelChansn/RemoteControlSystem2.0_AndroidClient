@@ -40,34 +40,19 @@ public class UDPScanThread extends Thread {
 		try {
 			dgSocket = new DatagramSocket();
 			dgSocket.setSoTimeout(1000);
-		} catch (SocketException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return;
-		}
-		byte b[] = (MessageEnums.UDPSCANMESSAGE + MessageEnums.NETSEPARATOR + android.os.Build.BRAND + "_"
-				+ android.os.Build.MODEL).getBytes();
-		DatagramPacket dgPacket = null;
-		try {
+			byte b[] = (MessageEnums.UDPSCANMESSAGE + MessageEnums.NETSEPARATOR + android.os.Build.BRAND + "_"
+					+ android.os.Build.MODEL).getBytes();
+			DatagramPacket dgPacket = null;
 			dgPacket = new DatagramPacket(b, b.length, InetAddress.getByName("255.255.255.255"), UDPPORT);
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			if (dgSocket != null)
-				dgSocket.close();
-			return;
-		}
-		try {
 			dgSocket.send(dgPacket);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (IOException e3) {
+			e3.printStackTrace();
 			if (dgSocket != null)
 				dgSocket.close();
 			return;
 		}
+		
 		long start = System.nanoTime();
-		System.out.println("****************");
 		/** scan for 5 seconds */
 		while (!isInterrupted() && (System.nanoTime() - start) / 1000000 < 3000) {
 			byte data[] = new byte[512];
@@ -96,18 +81,6 @@ public class UDPScanThread extends Thread {
 		}
 		
 		if (!isInterrupted()) {
-			servers.add("test");
-			servers.add("haha");
-			servers.add("test");
-			servers.add("haha");
-			servers.add("test");
-			servers.add("haha");
-			servers.add("test");
-			servers.add("haha");
-			servers.add("test");
-			servers.add("haha");
-			servers.add("test");
-			servers.add("haha");
 			handler.sendEmptyMessage(NUMCODES.NETSTATE.UDPSCANOK.getValue());
 		}
 
