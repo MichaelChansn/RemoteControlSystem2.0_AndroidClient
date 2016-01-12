@@ -3,9 +3,9 @@ package com.ks.net.enums;
 public class MessageEnums {
 
 	public enum MessageType {
-		BLOCK {
+		MOUSE_RIGHT_CLICK {
 			public byte getValue() {
-				return (byte) 0x00;
+				return (byte) 0x36;
 			}
 		},
 		COMPLETE {
@@ -15,11 +15,11 @@ public class MessageEnums {
 		};
 		public abstract byte getValue();
 
-		public static MessageType getBitmapType(byte value) {
+		public static MessageType getMessageType(byte value) {
 			MessageType ret = null;
 			switch (value) {
 			case 0x00:
-				ret = MessageType.BLOCK;
+				ret = MessageType.MOUSE_RIGHT_CLICK;
 				break;
 			case 0x01:
 				ret = MessageType.COMPLETE;
@@ -45,14 +45,14 @@ public class MessageEnums {
 
 		public abstract byte getValue();
 
-		public static MessageType getBitmapType(byte value) {
-			MessageType ret = null;
+		public static SpecialKeys getSpecialKeys(byte value) {
+			SpecialKeys ret = null;
 			switch (value) {
 			case 0x00:
-				ret = MessageType.BLOCK;
+				ret = SpecialKeys.BLOCK;
 				break;
 			case 0x01:
-				ret = MessageType.COMPLETE;
+				ret = SpecialKeys.COMPLETE;
 				break;
 			default:
 				break;
@@ -61,8 +61,12 @@ public class MessageEnums {
 		}
 	}
 
-	public static final String UDPSCANMESSAGE = "在不在啊？请回答。。。";
-	public static final String NETSEPARATOR="+";//消息分隔符
+	public static final String UDPSCANMESSAGE = "哥们，在不在啊？";
+    public static final String UDPSCANRETURN = "在啊，大哥，咋啦？";
+	public static final String NETSEPARATOR="<##>";//消息分隔符
+	public static final String UDPSEPARATOR="-->>";//消息分隔符
+	public static final String FINDNOSERVER="find no server online";
+	
 
 
 }

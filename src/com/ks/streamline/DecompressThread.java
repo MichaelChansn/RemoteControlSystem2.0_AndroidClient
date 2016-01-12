@@ -17,27 +17,35 @@ public class DecompressThread extends Thread {
 	private TcpNet tcpNet;
 	private LinkedBlockingQueue<Recpacket> recPacketQueue;
 	private LinkedBlockingQueue<BitmapWithCursor> difBtmQueue;
-	public DecompressThread(TcpNet tcpNet,LinkedBlockingQueue<Recpacket> recPacketQueue,LinkedBlockingQueue<BitmapWithCursor> difBtmQueue)
+	private boolean isRun=false;
+	public DecompressThread(TcpNet tcpNet)
 	{
-		if(tcpNet==null || recPacketQueue==null || difBtmQueue==null)
+		if(tcpNet==null )
 			throw new RuntimeException("DecompressThread constructor param cannot be null");
-		this.difBtmQueue=difBtmQueue;
-		this.recPacketQueue=recPacketQueue;
+		this.difBtmQueue=tcpNet.getDifBtmQueue();
+		this.recPacketQueue=tcpNet.getRecPacketQueue();
 		this.tcpNet=tcpNet;
+		this.isRun=true;
 	}
 
+	public void stopThread()
+	{
+		isRun=false;
+		this.interrupt();
+	}
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		super.run();
 		LZOjni lzo=new LZOjni();
-		while(!isInterrupted() && tcpNet.isConnecting())
+		while(isRun && !Thread.interrupted() && tcpNet.isConnecting())
 		{
+			//System.out.println("decompressThread*********************");
 			try
 			{
 			Recpacket rec=recPacketQueue.poll(200,TimeUnit.MILLISECONDS);
 			if(rec==null)
 				continue;
+			
 			PacketType packetType=rec.getPacketType();
 			BitmapWithCursor difBtm=new BitmapWithCursor();
 			difBtm.setPacketType(packetType);
@@ -72,7 +80,7 @@ public class DecompressThread extends Thread {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				FileLogger.getLogger().write(e.getMessage());
-				tcpNet.disConnect();
+				//tcpNet.disConnect();
 			}
 		}
 	}

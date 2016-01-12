@@ -1,7 +1,7 @@
 package com.ks.net;
 
 public class NUMCODES {
-public enum NETSTATE{
+public static enum NETSTATE{
 	CONNECTING(0x01),
 	CONNECTOK(0x02),
 	CONNECTFAILE(0x03),

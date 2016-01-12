@@ -17,7 +17,7 @@ public class Recpacket {
 	 * DIF_NUM:各个图形块的起始坐标，用于恢复图形。 BITMAP_DATA:要发送的bitmap数据
 	 */
 
-	public enum BitmapType {
+	public static enum BitmapType {
 		BLOCK {
 			public byte getValue() {
 				return (byte) 0x00;
@@ -46,7 +46,7 @@ public class Recpacket {
 		}
 	}
 
-	public enum PacketType {
+	public static enum PacketType {
 		BITMAP {
 			public byte getValue() {
 				return (byte) 0x00;
@@ -69,6 +69,7 @@ public class Recpacket {
 				ret = PacketType.TEXT;
 				break;
 			default:
+				
 				break;
 			}
 			return ret;

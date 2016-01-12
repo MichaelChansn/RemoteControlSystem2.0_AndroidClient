@@ -10,7 +10,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
 
-import com.ks.activitys.IndexActivity.MyHandler;
+import com.ks.activitys.IndexActivity.IndexHandler;
 import com.ks.net.enums.MessageEnums;
 
 public class UDPScanThread extends Thread {
@@ -18,9 +18,9 @@ public class UDPScanThread extends Thread {
 	private static final int UDPPORT = 9999;
 	private ArrayList<String> servers;
 	private DatagramSocket dgSocket = null;
-	private MyHandler handler;
+	private IndexHandler handler;
 
-	public UDPScanThread(ArrayList<String> servers, MyHandler handler) {
+	public UDPScanThread(ArrayList<String> servers, IndexHandler handler) {
 		this.servers = servers;
 		this.handler = handler;
 	}
@@ -39,7 +39,7 @@ public class UDPScanThread extends Thread {
 
 		try {
 			dgSocket = new DatagramSocket();
-			dgSocket.setSoTimeout(1000);
+			dgSocket.setSoTimeout(500);
 			byte b[] = (MessageEnums.UDPSCANMESSAGE + MessageEnums.NETSEPARATOR + android.os.Build.BRAND + "_"
 					+ android.os.Build.MODEL).getBytes();
 			DatagramPacket dgPacket = null;
@@ -51,24 +51,29 @@ public class UDPScanThread extends Thread {
 				dgSocket.close();
 			return;
 		}
-		
+
 		long start = System.nanoTime();
 		/** scan for 5 seconds */
-		while (!isInterrupted() && (System.nanoTime() - start) / 1000000 < 3000) {
+		while (!isInterrupted() && (System.nanoTime() - start) / 1000000 < 2000) {
 			byte data[] = new byte[512];
 			DatagramPacket packet = new DatagramPacket(data, data.length);
 			try {
 				dgSocket.receive(packet);
-				String rec=new String(packet.getData(), packet.getOffset(), packet.getLength());
-				String server=rec.split( MessageEnums.NETSEPARATOR)[0]+" "+packet.getAddress().toString()+":"+rec.split( MessageEnums.NETSEPARATOR)[1];
-				servers.add(server);
-			}
-			catch(SocketTimeoutException ex)
-			{
+				String rec = new String(packet.getData(), packet.getOffset(), packet.getLength());
+				System.out.println(rec);
+				String[] msgGet = rec.split(MessageEnums.NETSEPARATOR);
+				if (msgGet != null && msgGet.length == 3 && msgGet[0].equalsIgnoreCase(MessageEnums.UDPSCANRETURN)) {
+					if (msgGet[1].trim().length() == 0) {
+						msgGet[1] = "Unknown";
+					}
+					String server = msgGet[1] + MessageEnums.UDPSEPARATOR + packet.getAddress().toString().substring(1)
+							+ ":" + msgGet[2];
+					servers.add(server);
+				}
+			} catch (SocketTimeoutException ex) {
 				ex.printStackTrace();
 				continue;
-			}
-			catch (IOException e) {
+			} catch (IOException e) {
 				e.printStackTrace();
 				if (dgSocket != null)
 					dgSocket.close();
@@ -79,7 +84,7 @@ public class UDPScanThread extends Thread {
 		if (dgSocket != null) {
 			dgSocket.close();
 		}
-		
+
 		if (!isInterrupted()) {
 			handler.sendEmptyMessage(NUMCODES.NETSTATE.UDPSCANOK.getValue());
 		}

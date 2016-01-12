@@ -5,46 +5,62 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import com.ks.activitys.MainActivity;
-import com.ks.activitys.MainActivity.MyHandler;
+import com.ks.activitys.MainActivity.MainHandler;
 import com.ks.myexceptions.FileLogger;
 import com.ks.net.TcpNet;
 import com.ks.streamline.Recpacket.BitmapType;
 import com.ks.streamline.Recpacket.PacketType;
 import com.ks.testndk.JNIBtmProcess;
+import com.ks.tools.ScreenTools;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.view.SurfaceHolder;
 
 public class RecoverAndDisplayThread extends Thread {
-	private MyHandler hander;
+	private MainHandler hander;
+	private ScreenTools scTool;
 	private LinkedBlockingQueue<BitmapWithCursor> difBtmQueue;
-	private LinkedBlockingQueue<BitmapWithCursor> displayQueue;
 	private TcpNet tcpNet;
-	private Bitmap globalBtm = null;
+	private static Bitmap globalBtm = null;
 	private Matrix matrix = new Matrix();
-	private JNIBtmProcess jNITest = new JNIBtmProcess();
+	private JNIBtmProcess jNIProcess = new JNIBtmProcess();
+	private boolean isRun = false;
+	private boolean isInitMatrix = false;
 
-	public RecoverAndDisplayThread(TcpNet tcpNet, MyHandler hander, LinkedBlockingQueue<BitmapWithCursor> difBtmQueue,
-			LinkedBlockingQueue<BitmapWithCursor> displayQueue) {
-		if (tcpNet == null || difBtmQueue == null || hander == null)
+	public RecoverAndDisplayThread(TcpNet tcpNet, MainHandler hander) {
+		if (tcpNet == null || hander == null)
 			throw new RuntimeException(
 					"RecoverAndDisplayThread constructor params can not be null except displayQueue");
 		this.hander = hander;
-		this.difBtmQueue = difBtmQueue;
-		this.displayQueue = displayQueue;
+		this.difBtmQueue = tcpNet.getDifBtmQueue();
 		this.tcpNet = tcpNet;
+		isRun = true;
+		scTool = new ScreenTools(hander.getContext());
+	}
+
+	public void stopThread() {
+		isRun = false;
+		this.interrupt();
+	}
+
+	public void setMatrix(Matrix m) {
+		this.matrix.postConcat(m);
 	}
 
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
 		super.run();
-		while (!isInterrupted() && tcpNet.isConnecting()) {
+		while (isRun && !Thread.interrupted()&& tcpNet.isConnecting()) {
 			BitmapWithCursor btmDif;
 			try {
+				//System.out.println("displayThread*********************");
 				btmDif = difBtmQueue.poll(200, TimeUnit.MILLISECONDS);
 				if (btmDif == null)
 					continue;
+				
 				PacketType packetType = btmDif.getPacketType();
 				switch (packetType) {
 				case BITMAP:
@@ -54,9 +70,15 @@ public class RecoverAndDisplayThread extends Thread {
 					Bitmap btm = btmDif.getDifBitmap();
 					switch (type) {
 					case BLOCK:
-						jNITest.getBitmapOrlBtm(recs, globalBtm, btm);
+						jNIProcess.getBitmapOrlBtm(recs, globalBtm, btm);
+						btm.recycle();
+						btm = null;
 						break;
 					case COMPLETE:
+						if (globalBtm != null) {
+							globalBtm.recycle();
+						}
+
 						globalBtm = btm;
 						break;
 					default:
@@ -64,22 +86,25 @@ public class RecoverAndDisplayThread extends Thread {
 					}
 					final MainActivity context = (MainActivity) hander.getContext();
 					if (context != null) {
-						matrix.setScale((float) 1.0, (float) 1.0);
-						context.ivShow.post(new Runnable() {
+						if(!isInitMatrix)
+						{
+							isInitMatrix=true;
+							float scale=context.getSVShow().getHeight()/(float)globalBtm.getHeight();
+							this.matrix.postScale(scale, scale);
+						}
+						SurfaceHolder holder = context.getSVHolder();
+						if (holder != null) {
+							Canvas canvs = holder.lockCanvas();
+							canvs.drawBitmap(globalBtm, matrix, null);
+							holder.unlockCanvasAndPost(canvs);
 
-							@Override
-							public void run() {
-								// TODO Auto-generated method stub
-								context.ivShow.setImageMatrix(matrix);
-								context.ivShow.setImageBitmap(globalBtm);
-							}
-						});
+						}
 
 					}
 					break;
 				case TEXT:
-					//TODO
-					String valueFromServer=btmDif.getStringValue();
+					// TODO
+					String valueFromServer = btmDif.getStringValue();
 					System.out.println(valueFromServer);
 					break;
 				default:
@@ -90,9 +115,14 @@ public class RecoverAndDisplayThread extends Thread {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				FileLogger.getLogger().write(e.getMessage());
-				tcpNet.disConnect();
+				break;
+				// tcpNet.disConnect();
+			} catch (Exception e) {
+				e.printStackTrace();
+				break;
 			}
 
 		}
+		jNIProcess.release();
 	}
 }
