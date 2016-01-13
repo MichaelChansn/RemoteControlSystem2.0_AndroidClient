@@ -37,7 +37,7 @@ public class ReceiveThread extends Thread {
 	public void run() {
 		
 		while (isRun && !Thread.interrupted() && tcpNet.isConnecting()){
-			System.out.println("recThread*********************");
+			//System.out.println("recThread*********************");
 			Recpacket recpacket = new Recpacket();
 			
 			try {

@@ -1,6 +1,7 @@
 package com.ks.tools;
 
 import android.content.Context;
+import android.graphics.Matrix;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
@@ -34,4 +35,5 @@ public class ScreenTools {
 		return  displayMetrics.densityDpi;
 	}
 
+	
 }

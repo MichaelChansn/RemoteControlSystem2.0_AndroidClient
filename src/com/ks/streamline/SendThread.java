@@ -39,14 +39,42 @@ public class SendThread extends Thread {
 				if (sendPacket == null)
 					continue;
 				MessageType msgType = sendPacket.getMsgType();
+				//System.out.println("on "+msgType+":"+msgType.getValue());
 				switch (msgType) {
 				case MOUSE_RIGHT_CLICK:
-					dataOutputStream.writeByte(msgType.getValue());
+					dataOutputStream.writeByte((byte)msgType.getValue());
+					dataOutputStream.flush();
+					break;
+				case MOUSE_LEFT_CLICK:
+					dataOutputStream.writeByte((byte)msgType.getValue());
+					dataOutputStream.flush();
+					break;
+				case MOUSE_LEFT_DOUBLE_CLICK:
+					dataOutputStream.writeByte((byte)msgType.getValue());
+					dataOutputStream.flush();
+					break;
+				case MOUSE_SET:
+					dataOutputStream.writeByte((byte)msgType.getValue());
+					dataOutputStream.writeInt((int)sendPacket.getIntValue1());
+					dataOutputStream.writeInt((int)sendPacket.getIntValue2());
+					dataOutputStream.flush();
+					break;
+				case MOUSE_MOVE:
+					dataOutputStream.writeByte((byte)msgType.getValue());
+					dataOutputStream.writeInt((int)sendPacket.getIntValue1());
+					dataOutputStream.writeInt((int)sendPacket.getIntValue2());
+					dataOutputStream.flush();
+					break;
+				case MOUSE_WHEEL:
+					dataOutputStream.writeByte((byte)msgType.getValue());
+					dataOutputStream.writeInt((int)sendPacket.getIntValue1());
+					dataOutputStream.flush();
 					break;
 				default:
 					break;
 				}
 
+				
 			}
 		} catch (InterruptedException ex) {
 			ex.printStackTrace();

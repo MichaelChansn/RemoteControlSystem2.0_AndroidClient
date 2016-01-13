@@ -56,12 +56,15 @@ public class TcpNet {
 
 	}
 
-	public boolean sendMessage(SendPacket sendPacket) {
-		boolean retBool = false;
+	public synchronized void  sendMessage(SendPacket sendPacket) {
 		if (sendPacket != null) {
-			retBool = this.sendPacketQueue.offer(sendPacket);
+			try {
+				this.sendPacketQueue.put(sendPacket);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		return retBool;
 	}
 
 	public void cancelConnecting() {

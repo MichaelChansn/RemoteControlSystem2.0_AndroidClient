@@ -8,11 +8,32 @@ public class MessageEnums {
 				return (byte) 0x36;
 			}
 		},
-		COMPLETE {
+		MOUSE_SET {
 			public byte getValue() {
-				return (byte) 0x01;
+				return (byte) 0x3A;
 			}
-		};
+		},
+		MOUSE_LEFT_DOUBLE_CLICK{
+			public byte getValue() {
+				return (byte) 0x35;
+			}
+		},
+		MOUSE_LEFT_CLICK{
+			public byte getValue() {
+				return (byte) 0x34;
+			}
+		},
+		MOUSE_MOVE{
+			public byte getValue() {
+				return (byte) 0x39;
+			}
+		},
+		MOUSE_WHEEL{
+			public byte getValue() {
+				return (byte) 0x38;
+			}
+		}
+		;
 		public abstract byte getValue();
 
 		public static MessageType getMessageType(byte value) {
@@ -21,8 +42,20 @@ public class MessageEnums {
 			case 0x00:
 				ret = MessageType.MOUSE_RIGHT_CLICK;
 				break;
-			case 0x01:
-				ret = MessageType.COMPLETE;
+			case 0x34:
+				ret = MessageType.MOUSE_LEFT_CLICK;
+				break;
+			case 0x3A:
+				ret = MessageType.MOUSE_SET;
+				break;
+			case 0x35:
+				ret = MessageType.MOUSE_LEFT_DOUBLE_CLICK;
+				break;
+			case 0x39:
+				ret = MessageType.MOUSE_MOVE;
+				break;
+			case 0x38:
+				ret = MessageType.MOUSE_WHEEL;
 				break;
 			default:
 				break;

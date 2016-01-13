@@ -54,7 +54,7 @@ public class UDPScanThread extends Thread {
 
 		long start = System.nanoTime();
 		/** scan for 5 seconds */
-		while (!isInterrupted() && (System.nanoTime() - start) / 1000000 < 2000) {
+		while (!isInterrupted() && (System.nanoTime() - start) / 1000000 < 1500) {
 			byte data[] = new byte[512];
 			DatagramPacket packet = new DatagramPacket(data, data.length);
 			try {
