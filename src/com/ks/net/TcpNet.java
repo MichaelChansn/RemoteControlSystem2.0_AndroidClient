@@ -56,15 +56,12 @@ public class TcpNet {
 
 	}
 
-	public synchronized void  sendMessage(SendPacket sendPacket) {
+	public boolean sendMessage(SendPacket sendPacket) {
+		boolean retBool = false;
 		if (sendPacket != null) {
-			try {
-				this.sendPacketQueue.put(sendPacket);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			retBool = this.sendPacketQueue.offer(sendPacket);
 		}
+		return retBool;
 	}
 
 	public void cancelConnecting() {
@@ -79,7 +76,7 @@ public class TcpNet {
 	}
 
 	public boolean connect2Server(SocketAddress address, int timeOut) throws NetExceptions {
-		resetTcpNet();//clear old clients
+		resetTcpNet();// clear old clients
 		client = new Socket();
 		try {
 			client.setReuseAddress(true);
@@ -108,10 +105,10 @@ public class TcpNet {
 		return isConnecting;
 	}
 
-	private void resetTcpNet()
-	{
+	private void resetTcpNet() {
 		this.disConnect();
 	}
+
 	public DataInputStream getInputStream() {
 		return this.dataInputStream;
 	}
@@ -131,15 +128,15 @@ public class TcpNet {
 				isConnecting = false;
 				if (dataInputStream != null) {
 					dataInputStream.close();
-					
+
 				}
 				if (dataOutputStream != null) {
 					dataOutputStream.close();
-					
+
 				}
 				if (client != null) {
 					client.close();
-					
+
 				}
 				if (recThread != null) {
 					((ReceiveThread) recThread).stopThread();
@@ -149,20 +146,18 @@ public class TcpNet {
 					((SendThread) sendThread).stopThread();
 					sendThread.join();
 				}
-				
+
 			} catch (IOException e) {
 				e.printStackTrace();
 				FileLogger.getLogger().write(e.getMessage());
 			} catch (InterruptedException ex) {
 				ex.printStackTrace();
-			}
-			finally
-			{
+			} finally {
 				dataInputStream = null;
 				dataOutputStream = null;
 				client = null;
-				recThread=null;
-				sendThread=null;
+				recThread = null;
+				sendThread = null;
 				recPacketQueue.clear();
 				difBtmQueue.clear();
 				sendPacketQueue.clear();
