@@ -9,8 +9,14 @@ import com.ks.streamline.DecompressThread;
 import com.ks.streamline.RecoverAndDisplayThread;
 import com.ks.streamline.SendPacket;
 import com.ks.testndk.R;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
+import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.PointF;
@@ -25,7 +31,10 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.view.Window;
 
 public class MainActivity extends Activity {
@@ -60,6 +69,7 @@ public class MainActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
 		findViews();
+		createFloatMenu();
 	}
 
 	private void findViews() {
@@ -299,6 +309,117 @@ public class MainActivity extends Activity {
 
 	}
 
+	
+	private void createFloatMenu()
+	{
+		// Set up the white button on the lower right corner
+				// more or less with default parameter
+				final ImageView fabIconNew = new ImageView(this);
+				fabIconNew.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_new_light));
+				int bigActionButtonSize = getResources().getDimensionPixelSize(R.dimen.big_action_button_size);
+				int bigActionButtonMargin = getResources().getDimensionPixelOffset(R.dimen.big_action_button_margin);
+				int bigActionButtonContentSize = getResources().getDimensionPixelSize(R.dimen.big_action_button_content_size);
+				int bigActionButtonContentMargin = getResources()
+						.getDimensionPixelSize(R.dimen.big_action_button_content_margin);
+				int bigActionMenuRadius = getResources().getDimensionPixelSize(R.dimen.big_action_menu_radius);
+				int smallSubActionButtonSize = getResources().getDimensionPixelSize(R.dimen.small_sub_action_button_size);
+				int smallSubActionButtonContentMargin = getResources()
+						.getDimensionPixelSize(R.dimen.small_sub_action_button_content_margin);
+
+				FloatingActionButton.LayoutParams bigParams = new FloatingActionButton.LayoutParams(bigActionButtonSize,
+						bigActionButtonSize);
+				bigParams.setMargins(bigActionButtonMargin, bigActionButtonMargin, bigActionButtonMargin,
+						bigActionButtonMargin);
+				fabIconNew.setLayoutParams(bigParams);
+
+				FloatingActionButton.LayoutParams fabIconNewParams = new FloatingActionButton.LayoutParams(
+						bigActionButtonContentSize, bigActionButtonContentSize);
+				fabIconNewParams.setMargins(bigActionButtonContentMargin, bigActionButtonContentMargin,
+						bigActionButtonContentMargin, bigActionButtonContentMargin);
+				final FloatingActionButton rightLowerButton = new FloatingActionButton.Builder(this)
+						.setContentView(fabIconNew, fabIconNewParams)
+						.setLayoutParams(bigParams)/*
+													 * .setBackgroundDrawable(R.drawable
+													 * .button_action_red_selector)
+													 * .setPosition(FloatingActionButton
+													 * .POSITION_BOTTOM_CENTER)
+													 */
+						.build();
+
+				SubActionButton.Builder rLSubBuilder = new SubActionButton.Builder(this);
+				/*
+				 * rLSubBuilder.setBackgroundDrawable(getResources().getDrawable(R.
+				 * drawable.button_action_blue_selector));
+				 */
+
+				FrameLayout.LayoutParams smallContentParams = new FrameLayout.LayoutParams(
+						FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+				smallContentParams.setMargins(smallSubActionButtonContentMargin, smallSubActionButtonContentMargin,
+						smallSubActionButtonContentMargin, smallSubActionButtonContentMargin);
+				rLSubBuilder.setLayoutParams(smallContentParams);
+				FrameLayout.LayoutParams smallParams = new FrameLayout.LayoutParams(smallSubActionButtonSize,
+						smallSubActionButtonSize);
+				rLSubBuilder.setLayoutParams(smallParams);
+
+				ImageView rlIcon1 = new ImageView(this);
+				ImageView rlIcon2 = new ImageView(this);
+				ImageView rlIcon3 = new ImageView(this);
+				ImageView rlIcon4 = new ImageView(this);
+
+				rlIcon1.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_chat_light));
+				rlIcon2.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_camera_light));
+				rlIcon3.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_video_light));
+				rlIcon4.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_place_light));
+
+				
+				// Build the menu with default options: light theme, 90 degrees, 72dp
+				// radius.
+				// Set 4 default SubActionButtons
+				final FloatingActionMenu rightLowerMenu = new FloatingActionMenu.Builder(this)
+						.addSubActionView(rLSubBuilder.setContentView(rlIcon1, smallContentParams).build())
+						.addSubActionView(rLSubBuilder.setContentView(rlIcon2, smallContentParams).build())
+						.addSubActionView(rLSubBuilder.setContentView(rlIcon3, smallContentParams).build())
+						.addSubActionView(rLSubBuilder.setContentView(rlIcon4, smallContentParams).build())
+						.setRadius(bigActionMenuRadius)
+						/*.setStartAngle(-20)
+						.setEndAngle(-160)*/
+						.attachTo(rightLowerButton)
+						.build();
+
+				rlIcon1.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						Intent intent = new Intent(MainActivity.this, MouseActivity.class);
+						MainActivity.this.startActivity(intent);
+						
+					}
+				});
+				// Listen menu open and close events to animate the button content view
+				rightLowerMenu.setStateChangeListener(new FloatingActionMenu.MenuStateChangeListener() {
+					@Override
+					public void onMenuOpened(FloatingActionMenu menu) {
+						// Rotate the icon of rightLowerButton 45 degrees clockwise
+						fabIconNew.setRotation(0);
+						PropertyValuesHolder pvhR = PropertyValuesHolder.ofFloat(View.ROTATION, 45);
+						ObjectAnimator animation = ObjectAnimator.ofPropertyValuesHolder(fabIconNew, pvhR);
+						animation.start();
+					}
+
+					@Override
+					public void onMenuClosed(FloatingActionMenu menu) {
+						// Rotate the icon of rightLowerButton 45 degrees
+						// counter-clockwise
+						fabIconNew.setRotation(45);
+						PropertyValuesHolder pvhR = PropertyValuesHolder.ofFloat(View.ROTATION, 0);
+						ObjectAnimator animation = ObjectAnimator.ofPropertyValuesHolder(fabIconNew, pvhR);
+						animation.start();
+					}
+				});
+
+	}
+	
 	private void clickRightMouse() {
 		SendPacket senPacket = new SendPacket();
 		senPacket.setMsgType(MessageType.MOUSE_RIGHT_CLICK);

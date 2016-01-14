@@ -65,7 +65,7 @@ public class IndexActivity extends Activity {
 		tvIndexTitle = (TextView) findViewById(R.id.textViewIndexTitle);
 		servers = new ArrayList<String>();
 		handler = new IndexHandler(IndexActivity.this);
-		tcpNet=TcpNet.getInstance();
+		tcpNet = TcpNet.getInstance();
 
 	}
 
@@ -121,7 +121,7 @@ public class IndexActivity extends Activity {
 					netConnectThread.start();
 
 				} else {
-					
+
 					new AlertDialog.Builder(IndexActivity.this).setIcon(android.R.drawable.stat_notify_error)
 							.setTitle("Server IP Is Wrong!")
 							.setMessage("Please Make Sure Server IP And Port is Right, Can Not Be Empty!")
@@ -196,6 +196,23 @@ public class IndexActivity extends Activity {
 					}
 				}
 				break;
+			case UDPSCANFAIL:
+				if (((IndexActivity) theActivity).dialog != null) {
+					((IndexActivity) theActivity).dialog.dismiss();
+					((IndexActivity) theActivity).dialog = null;
+					new AlertDialog.Builder(theActivity).setIcon(android.R.drawable.stat_notify_error).setTitle("扫描失败！")
+							.setMessage("请检查您的网络状况，稍后再试。。。！")
+							.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									// TODO Auto-generated method stub
+									dialog.dismiss();
+
+								}
+							}).create().show();
+				}
+				break;
 			case CONNECTING:
 				((IndexActivity) theActivity).dialog = ProgressDialog.show(theActivity, "正在连接", "请稍后...");
 				((IndexActivity) theActivity).dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
@@ -218,7 +235,7 @@ public class IndexActivity extends Activity {
 					((IndexActivity) theActivity).dialog = null;
 				}
 				Toast.makeText(theActivity, "连接成功", Toast.LENGTH_SHORT).show();
-				Intent intent = new Intent((IndexActivity) theActivity,MainActivity.class);
+				Intent intent = new Intent((IndexActivity) theActivity, MainActivity.class);
 				((IndexActivity) theActivity).startActivity(intent);
 				((IndexActivity) theActivity).finish();
 				break;

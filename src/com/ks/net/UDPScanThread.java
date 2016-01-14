@@ -4,11 +4,8 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.SocketException;
 import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.concurrent.TimeoutException;
 
 import com.ks.activitys.IndexActivity.IndexHandler;
 import com.ks.net.enums.MessageEnums;
@@ -46,6 +43,7 @@ public class UDPScanThread extends Thread {
 			dgPacket = new DatagramPacket(b, b.length, InetAddress.getByName("255.255.255.255"), UDPPORT);
 			dgSocket.send(dgPacket);
 		} catch (IOException e3) {
+			handler.sendEmptyMessage(NUMCODES.NETSTATE.UDPSCANFAIL.getValue());
 			e3.printStackTrace();
 			if (dgSocket != null)
 				dgSocket.close();
@@ -75,6 +73,7 @@ public class UDPScanThread extends Thread {
 				continue;
 			} catch (IOException e) {
 				e.printStackTrace();
+				//handler.sendEmptyMessage(NUMCODES.NETSTATE.UDPSCANFAIL.getValue());
 				if (dgSocket != null)
 					dgSocket.close();
 				return;

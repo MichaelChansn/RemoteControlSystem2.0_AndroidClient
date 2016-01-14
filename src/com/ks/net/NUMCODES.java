@@ -7,6 +7,7 @@ public static enum NETSTATE{
 	CONNECTFAILE(0x03),
 	CONNECTTIMEOUT(0x04),
 	UDPSCANOK(0x05),
+	UDPSCANFAIL(0x06),
 	WRONGCODE(0xffffffff),
 	;
 	private int code;
@@ -37,6 +38,9 @@ public static enum NETSTATE{
 				break;
 			case 0x05:
 				ret=UDPSCANOK;
+				break;
+			case 0x06:
+				ret=UDPSCANFAIL;
 				break;
 			default:
 				ret=WRONGCODE;
