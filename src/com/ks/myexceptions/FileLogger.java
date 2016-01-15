@@ -23,6 +23,7 @@ public class FileLogger {
 				if(loger==null)
 				{
 					loger=new FileLogger();
+					/*
 					try {
 						String path=android.os.Environment.getExternalStorageDirectory().getPath();
 						logFile=new PrintStream(new FileOutputStream(path+File.separator+LOGEPATH, true));
@@ -30,7 +31,7 @@ public class FileLogger {
 					} catch (FileNotFoundException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}
+					}*/
 				}
 			}
 		}
@@ -39,6 +40,7 @@ public class FileLogger {
 	
 	public synchronized void write(String log)
 	{
+		/*
 		if(isInitFileOK)
 		{
 			logFile.println(new Date().toString()+"-->"+log);
@@ -47,7 +49,7 @@ public class FileLogger {
 		{
 			throw new RuntimeException("the log file is not create success");
 		}
-		
+		*/
 	}
 	@Override
 	protected void finalize() throws Throwable {

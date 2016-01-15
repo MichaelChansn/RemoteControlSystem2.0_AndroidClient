@@ -1,9 +1,9 @@
 package com.ks.activitys;
 
+import com.ks.application.R;
 import com.ks.net.TcpNet;
 import com.ks.net.enums.MessageEnums.MessageType;
 import com.ks.streamline.SendPacket;
-import com.ks.testndk.R;
 
 import android.app.Activity;
 import android.graphics.PointF;
@@ -14,13 +14,17 @@ import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.Button;
 import android.widget.FrameLayout;
 
 public class MouseActivity extends Activity {
 
 	private FrameLayout touch;
+	private Button mouseLeft;
+	private Button mouseRight;
 	// 手势识别
 	private GestureDetector gestureDetector;
+	private MouseListener mouseListener;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,21 +36,106 @@ public class MouseActivity extends Activity {
 
 	private void findViews() {
 		touch = (FrameLayout) findViewById(R.id.touch);
+		touch.setLongClickable(false);
+		mouseLeft = (Button) findViewById(R.id.buttonLeft);
+		mouseRight = (Button) findViewById(R.id.buttonRight);
+
 	}
 
 	private void inits() {
 		gestureDetector = new GestureDetector(this, new MyGestureListener());
 		gestureDetector.setOnDoubleTapListener(new MyOnDoubleTapListener());
 		touch.setOnTouchListener(new MyOnTouchListener());
+		mouseListener=new MouseListener();
+		mouseLeft.setOnTouchListener(mouseListener);
+		mouseRight.setOnTouchListener(mouseListener);
 	}
 
+	private class MouseListener implements OnTouchListener {
+
+		private boolean isLeft=true;
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			// TODO Auto-generated method stub
+			switch (v.getId()) {
+			case R.id.buttonLeft:
+				isLeft=true;
+				break;
+			case R.id.buttonRight:
+				isLeft=false;
+				break;
+			default:
+				break;
+			}
+			
+			switch (event.getAction() & MotionEvent.ACTION_MASK) {
+			case MotionEvent.ACTION_DOWN:
+				//if(event.getPointerCount()==1)
+				if(isLeft)
+				{
+					MouseLeftDown();
+				}
+				else
+				{
+					MouseRightDown();
+				}
+				break;
+			case MotionEvent.ACTION_UP:
+				//if(event.getPointerCount()==1)
+				if(isLeft)
+				{
+					MouseLeftUp();
+				}
+				else
+				{
+					MouseRightUp();
+				}
+				break;
+			}
+			return false;
+		}
+
+	}
+
+	private PointF firstPoint=new PointF();
+	private PointF secondPoint=new PointF();
 	private class MyOnTouchListener implements OnTouchListener {
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
+			
 			// TODO Auto-generated method stub
 			gestureDetector.onTouchEvent(event);
 			// true,处理完毕，不在向下传送，false，继续向下传送消息
+			switch (event.getAction() & MotionEvent.ACTION_MASK) {
+			case MotionEvent.ACTION_DOWN:
+			case MotionEvent.ACTION_POINTER_DOWN:
+				v.setBackgroundColor(getResources().getColor(R.color.mouseDown));
+				if (event.getPointerCount() == 3) {
+					MouseLeftDown();
+				}
+				if(event.getPointerCount()==2)
+				{
+					firstPoint.set(event.getX(0),event.getY(0));
+					secondPoint.set(event.getX(1), event.getY(1));
+					
+				}
+				break;
+			case MotionEvent.ACTION_UP:
+			case MotionEvent.ACTION_POINTER_UP:
+				v.setBackgroundColor(getResources().getColor(R.color.mouseUp));
+				if (event.getPointerCount() == 3) {
+					MouseLeftUp();
+				}
+				if(event.getPointerCount()==2)
+				{
+					if(firstPoint.equals(event.getX(0), event.getY(0)) && secondPoint.equals(event.getX(1), event.getY(1)))
+					{
+						clickRightMouse();
+					}
+				}
+				break;
+			}
 			return true;
 		}
 
@@ -58,7 +147,8 @@ public class MouseActivity extends Activity {
 		public boolean onDown(MotionEvent e) {
 			// System.out.println("onDown Pressed" + ":" + e.getX() + ":" +
 			// e.getY());
-			if (e.getPointerCount() == 1) {
+			if (e.getPointerCount() == 3) {
+
 			}
 			return false;
 		}
@@ -72,8 +162,8 @@ public class MouseActivity extends Activity {
 
 		@Override
 		public void onLongPress(MotionEvent e) {
-			// System.out.println("OnLongPressed Pressed");
-			clickRightMouse();
+			 System.out.println("OnLongPressed Pressed");
+			//clickRightMouse();
 		}
 
 		@Override
@@ -81,17 +171,22 @@ public class MouseActivity extends Activity {
 			// System.out.println("OnScroll Pressed" + ":" + distanceX + ":" +
 			// distanceY);
 			if (e2.getPointerCount() == 1) {
-				onMouseMove(distanceX,distanceY);
+				onMouseMove(distanceX, distanceY);
 			}
-			if (e2.getPointerCount() > 1) {
+			if (e2.getPointerCount() == 2) {
 				onMiddleButtonMove(-(int) distanceY);
 			}
-			return false;
+			if (e2.getPointerCount() == 3) {
+
+				onMouseMove(distanceX, distanceY);
+
+			}
+			return true;
 		}
 
 		@Override
 		public void onShowPress(MotionEvent e) {
-			// System.out.println("onShowPress Pressed");
+			//System.out.println("onShowPress Pressed");
 
 		}
 
@@ -111,12 +206,13 @@ public class MouseActivity extends Activity {
 			if (e.getPointerCount() == 1) {
 				clickLeftMouse();
 			}
+
 			return true;
 		}
 
 		@Override
 		public boolean onDoubleTapEvent(MotionEvent e) {
-			// System.out.println("onDoubleTapEvent...");
+			System.out.println("onDoubleTapEvent...");
 			return false;
 		}
 
@@ -159,13 +255,36 @@ public class MouseActivity extends Activity {
 		TcpNet.getInstance().sendMessage(senPacket);
 	}
 
-	private void onMouseMove(float mx,float my) {
+	private void MouseLeftDown() {
+		SendPacket senPacket = new SendPacket();
+		senPacket.setMsgType(MessageType.MOUSE_LEFT_DOWN);
+		TcpNet.getInstance().sendMessage(senPacket);
+	}
 
-			SendPacket senPacket = new SendPacket();
-			senPacket.setMsgType(MessageType.MOUSE_MOVE);
-			senPacket.setIntValue1(-(int)mx);
-			senPacket.setIntValue2(-(int)my);
-			TcpNet.getInstance().sendMessage(senPacket);
+	private void MouseLeftUp() {
+		SendPacket senPacket = new SendPacket();
+		senPacket.setMsgType(MessageType.MOUSE_LEFT_UP);
+		TcpNet.getInstance().sendMessage(senPacket);
+	}
+
+	private void MouseRightDown() {
+		SendPacket senPacket = new SendPacket();
+		senPacket.setMsgType(MessageType.MOUSE_RIGHT_DOWN);
+		TcpNet.getInstance().sendMessage(senPacket);
+	}
+
+	private void MouseRightUp() {
+		SendPacket senPacket = new SendPacket();
+		senPacket.setMsgType(MessageType.MOUSE_RIGHT_UP);
+		TcpNet.getInstance().sendMessage(senPacket);
+	}
+	private void onMouseMove(float mx, float my) {
+
+		SendPacket senPacket = new SendPacket();
+		senPacket.setMsgType(MessageType.MOUSE_MOVE);
+		senPacket.setIntValue1(-(int) mx);
+		senPacket.setIntValue2(-(int) my);
+		TcpNet.getInstance().sendMessage(senPacket);
 
 	}
 }

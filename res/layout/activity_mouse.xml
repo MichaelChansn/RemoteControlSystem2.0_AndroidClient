@@ -2,15 +2,48 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bizhi"
     tools:context="com.ks.activitys.MouseActivity" >
 
-    <FrameLayout
-        android:id="@+id/touch"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/bizhi"
-        android:clickable="true"
-        android:longClickable="true" >
-    </FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <FrameLayout
+                android:id="@+id/touch"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.2"
+                android:clickable="true"
+                android:background="@color/mouseUp"
+                android:longClickable="true" >
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/gray"
+                android:clickable="false"
+                android:longClickable="false"
+                android:orientation="horizontal" >
+
+                <Button
+                    android:id="@+id/buttonLeft"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_margin="0dp"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/buttonRight"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_margin="0dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+        </LinearLayout>
 
 </RelativeLayout>

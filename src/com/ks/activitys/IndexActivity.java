@@ -3,12 +3,12 @@ package com.ks.activitys;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
+import com.ks.application.R;
 import com.ks.net.NUMCODES.NETSTATE;
 import com.ks.net.NetConnectThread;
 import com.ks.net.TcpNet;
 import com.ks.net.UDPScanThread;
 import com.ks.net.enums.MessageEnums;
-import com.ks.testndk.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;

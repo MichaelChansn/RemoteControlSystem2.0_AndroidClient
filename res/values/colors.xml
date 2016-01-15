@@ -8,6 +8,9 @@
 	<color name="black">#000000</color>
 	<color name="freshred">#ff0066</color>
 	<color name="halfalpha">#0f000000</color>
-	<color name="halfWhite">#6fffffff</color>
+	<color name="halfWhite">#7fffffff</color>
 	<color name="gray">#ffEAEAE9</color>
+	<color name="mouseDown">#ffb0b0b0</color>
+	<color name="mouseUp">#ffC0C0C0</color>
+	
 </resources>

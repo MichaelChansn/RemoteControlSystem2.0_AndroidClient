@@ -2,40 +2,46 @@ package com.ks.activitys;
 
 import java.lang.ref.WeakReference;
 
+import com.ks.application.R;
 import com.ks.net.NUMCODES.NETSTATE;
 import com.ks.net.TcpNet;
 import com.ks.net.enums.MessageEnums.MessageType;
+import com.ks.net.enums.MessageEnums.SpecialKeys;
 import com.ks.streamline.DecompressThread;
 import com.ks.streamline.RecoverAndDisplayThread;
 import com.ks.streamline.SendPacket;
-import com.ks.testndk.R;
-import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
-import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
-import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
-import android.animation.ObjectAnimator;
-import android.animation.PropertyValuesHolder;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
-import android.content.Intent;
+import android.content.Context;
 import android.graphics.Matrix;
-import android.graphics.Point;
 import android.graphics.PointF;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.view.View.OnTouchListener;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.view.Window;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 public class MainActivity extends Activity {
 
@@ -43,25 +49,54 @@ public class MainActivity extends Activity {
 	private SurfaceHolder svHolder;
 	private MainHandler handler;
 	private TcpNet tcpNet;
-	private static final int NONE = 0;
-	private static final int DRAG = 1;
-	private static final int ZOOM = 2;
-	private int mode = NONE;
 	private PointF startPoint = new PointF();
 	private PointF movePoint = new PointF();
-	private PointF midPoint = new PointF();
-	private static float lx; // 记录上次鼠标的位置
-	private static float ly;
-	private float oldDist;
 	private Thread decompreThread;
 	private RecoverAndDisplayThread showThread;
+	private EditText edSendText;
+	private Button specalKeyClose;
+	private RelativeLayout speicalKeys;
 
+	private Button buttonOK;
+	private Button backspace;
+	private Button enter;
+
+	private Button space;
+	private Button esc;
+	private Button shift;
+	private Button ctrl;
+	private Button alt;
+	private Button tab;
+	private Button win;
+	private Button f1;
+	private Button f2;
+	private Button f3;
+	private Button f4;
+	private Button f5;
+	private Button f6;
+	private Button f7;
+	private Button f8;
+	private Button f9;
+	private Button f10;
+	private Button f11;
+	private Button f12;
+	private Button end;
+	private Button home;
+	private Button delete;
+	private Button prtsc;
+	private Button insert;
+	private Button numlock;
+	private Button pageup;
+	private Button pagedown;
+	private Button upkey;
+	private Button downkey;
+	private Button leftkey;
+	private Button rightkey;
+	private Button capslock;
 	// 手势识别
 	private GestureDetector gestureDetector;
-	private Matrix globalMatrix = new Matrix();
-	private Matrix savedMatrix = new Matrix();
 	private Matrix tmpMatrix = new Matrix();
-	private Point pointHit = new Point();
+	private SpecialKeyLinstener specialKeyLinstener;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -69,11 +104,15 @@ public class MainActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
 		findViews();
-		createFloatMenu();
+		initFuns();
 	}
 
 	private void findViews() {
 		svShow = (SurfaceView) findViewById(R.id.surfaceViewShow);
+		edSendText = (EditText) findViewById(R.id.editTextSendText);
+		edSendText.setVisibility(View.INVISIBLE);
+		specalKeyClose = (Button) findViewById(R.id.buttonSpecalKeyClose);
+		speicalKeys = (RelativeLayout) findViewById(R.id.relativeLayoutSpelKeys);
 		svHolder = svShow.getHolder();
 		svShow.setOnTouchListener(new svShowOnTouchListener());
 		svHolder.addCallback(new SurfaceViewCallback());
@@ -81,6 +120,196 @@ public class MainActivity extends Activity {
 		tcpNet = TcpNet.getInstance();
 		gestureDetector = new GestureDetector(this, new MyGestureListener());
 		gestureDetector.setOnDoubleTapListener(new MyOnDoubleTapListener());
+		new FloatMenu(MainActivity.this).createFloatMenu();
+		findSpeialKeyViews();
+		specialKeyLinstener = new SpecialKeyLinstener();
+
+	}
+
+	private void findSpeialKeyViews() {
+		buttonOK = (Button) findViewById(R.id.button_OK);
+		backspace = (Button) findViewById(R.id.button_Backspace);
+		enter = (Button) findViewById(R.id.button_Enter);
+
+		space = (Button) findViewById(R.id.button_Space);
+		esc = (Button) findViewById(R.id.button_Esc);
+		shift = (Button) findViewById(R.id.button_Shift);
+		ctrl = (Button) findViewById(R.id.button_Ctrl);
+		alt = (Button) findViewById(R.id.button_Alt);
+		tab = (Button) findViewById(R.id.button_Tab);
+
+		win = (Button) findViewById(R.id.button_Windows);
+		f1 = (Button) findViewById(R.id.button_F1);
+		f2 = (Button) findViewById(R.id.button_F2);
+		f3 = (Button) findViewById(R.id.button_F3);
+		f4 = (Button) findViewById(R.id.button_F4);
+		f5 = (Button) findViewById(R.id.button_F5);
+		f6 = (Button) findViewById(R.id.button_F6);
+		f7 = (Button) findViewById(R.id.button_F7);
+		f8 = (Button) findViewById(R.id.button_F8);
+		f9 = (Button) findViewById(R.id.button_F9);
+		f10 = (Button) findViewById(R.id.button_F10);
+		f11 = (Button) findViewById(R.id.button_F11);
+		f12 = (Button) findViewById(R.id.button_F12);
+
+		end = (Button) findViewById(R.id.button_End);
+		home = (Button) findViewById(R.id.button_Home);
+		delete = (Button) findViewById(R.id.button_Delete);
+		prtsc = (Button) findViewById(R.id.button_PrtSc);
+		insert = (Button) findViewById(R.id.button_Insert);
+		numlock = (Button) findViewById(R.id.button_NumLock);
+		pageup = (Button) findViewById(R.id.button_PageUp);
+		pagedown = (Button) findViewById(R.id.button_PageDown);
+		upkey = (Button) findViewById(R.id.button_Up);
+		downkey = (Button) findViewById(R.id.button_Down);
+		leftkey = (Button) findViewById(R.id.button_Left);
+		rightkey = (Button) findViewById(R.id.button_Right);
+		capslock = (Button) findViewById(R.id.button_CapsLock);
+	}
+
+	private void initFuns() {
+		specalKeyClose.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				closeSpecialKeys();
+
+			}
+		});
+		edSendText.setOnKeyListener(new OnKeyListener() {
+			@Override
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+				if (keyCode == KeyEvent.KEYCODE_DEL) {
+					if (event.getAction() == KeyEvent.ACTION_DOWN) {
+						sendKeyMessage(MessageType.KEY_DOWN, SpecialKeys.BACKSPACE);
+						sendKeyMessage(MessageType.KEY_UP, SpecialKeys.BACKSPACE);
+					}
+
+				}
+
+				return false;
+			}
+		});
+		edSendText.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				// TODO Auto-generated method stub
+				System.out.println("onTextChanged得到的数据是：——>" + edSendText.getText().toString());
+
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+				// TODO Auto-generated method stub
+				System.out.println("beforeTextChanged得到的数据是：——>" + edSendText.getText().toString());
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				System.out.println("afterTextChanged得到的数据是：——>" + edSendText.getText().toString());
+
+				String getText = edSendText.getText().toString();
+				if (!getText.isEmpty()) {
+					sendTextMessage(getText);
+					edSendText.getText().clear();// setText("");
+				}
+
+			}
+		});
+
+		edSendText.setOnEditorActionListener(new OnEditorActionListener() {
+
+			@Override
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				// TODO Auto-generated method stub
+
+				if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_UNSPECIFIED) {
+					// System.out.println("这个是回车键按下了哦J克隆空款就考了利率J");
+					sendKeyMessage(MessageType.KEY_DOWN, SpecialKeys.ENTER);
+					sendKeyMessage(MessageType.KEY_UP, SpecialKeys.ENTER);
+				}
+
+				return true;
+			}
+		});
+		buttonOK.setOnClickListener(specialKeyLinstener);
+		backspace.setOnClickListener(specialKeyLinstener);
+		enter.setOnClickListener(specialKeyLinstener);
+
+		space.setOnClickListener(specialKeyLinstener);
+		esc.setOnClickListener(specialKeyLinstener);
+		shift.setOnClickListener(specialKeyLinstener);
+		ctrl.setOnClickListener(specialKeyLinstener);
+		alt.setOnClickListener(specialKeyLinstener);
+		tab.setOnClickListener(specialKeyLinstener);
+
+		win.setOnClickListener(specialKeyLinstener);
+		f1.setOnClickListener(specialKeyLinstener);
+		f2.setOnClickListener(specialKeyLinstener);
+		f3.setOnClickListener(specialKeyLinstener);
+		f4.setOnClickListener(specialKeyLinstener);
+		f5.setOnClickListener(specialKeyLinstener);
+		f6.setOnClickListener(specialKeyLinstener);
+		f7.setOnClickListener(specialKeyLinstener);
+		f8.setOnClickListener(specialKeyLinstener);
+		f9.setOnClickListener(specialKeyLinstener);
+		f10.setOnClickListener(specialKeyLinstener);
+		f11.setOnClickListener(specialKeyLinstener);
+		f12.setOnClickListener(specialKeyLinstener);
+
+		end.setOnClickListener(specialKeyLinstener);
+		home.setOnClickListener(specialKeyLinstener);
+		delete.setOnClickListener(specialKeyLinstener);
+		prtsc.setOnClickListener(specialKeyLinstener);
+		insert.setOnClickListener(specialKeyLinstener);
+		numlock.setOnClickListener(specialKeyLinstener);
+		pageup.setOnClickListener(specialKeyLinstener);
+		pagedown.setOnClickListener(specialKeyLinstener);
+		upkey.setOnClickListener(specialKeyLinstener);
+		downkey.setOnClickListener(specialKeyLinstener);
+		leftkey.setOnClickListener(specialKeyLinstener);
+		rightkey.setOnClickListener(specialKeyLinstener);
+		capslock.setOnClickListener(specialKeyLinstener);
+	}
+
+	public boolean isSpecialShow() {
+		return speicalKeys.getVisibility() == View.VISIBLE;
+	}
+
+	public void showIME() {
+
+		InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		inputMethodManager.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+		edSendText.setVisibility(View.VISIBLE);
+		edSendText.setFocusable(true);
+		// edSendText.setFocusableInTouchMode(true);
+		edSendText.requestFocus();
+		// edSendText.requestFocusFromTouch();
+	}
+
+	public void showSpecialKeys() {
+		System.out.println("onshow");
+		speicalKeys.setAlpha(0);
+		speicalKeys.setVisibility(View.VISIBLE);
+		
+		speicalKeys.animate().alpha(1).setDuration(500).setListener(null).start();
+	}
+
+	public void closeSpecialKeys() {
+		System.out.println("onclose");
+		speicalKeys.setAlpha(1);
+		speicalKeys.animate().alpha(0).setDuration(500).setListener(new AnimatorListenerAdapter() {
+
+			@Override
+			public void onAnimationEnd(Animator animation) {
+				speicalKeys.setVisibility(View.GONE);
+			}
+
+		}).start();
 
 	}
 
@@ -93,6 +322,7 @@ public class MainActivity extends Activity {
 	}
 
 	private void inits() {
+		startRecPic();
 		initThreads(tcpNet, handler);
 	}
 
@@ -135,8 +365,18 @@ public class MainActivity extends Activity {
 	}
 
 	private void stopShowThreads() {
+		stopRecPic();
 		((DecompressThread) decompreThread).stopThread();
 		((RecoverAndDisplayThread) showThread).stopThread();
+		try {
+			decompreThread.join();
+			showThread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} finally {
+			decompreThread = null;
+			showThread = null;
+		}
 
 	}
 
@@ -148,16 +388,18 @@ public class MainActivity extends Activity {
 			gestureDetector.onTouchEvent(event);
 			switch (event.getAction() & MotionEvent.ACTION_MASK) {
 			case MotionEvent.ACTION_DOWN:
-				System.out.println("onTouch ACTION_DOWN");
-				mode = DRAG;
+			case MotionEvent.ACTION_POINTER_DOWN:
+				if (event.getPointerCount() == 3) {
+					MouseLeftDown();
+				}
 				startPoint.set(event.getX(), event.getY());
 				movePoint.set(event.getX(), event.getY());
 				break;
 			case MotionEvent.ACTION_UP:
 			case MotionEvent.ACTION_POINTER_UP:
-				mode = NONE;
-				break;
-			case MotionEvent.ACTION_POINTER_DOWN:
+				if (event.getPointerCount() == 3) {
+					MouseLeftUp();
+				}
 				break;
 			case MotionEvent.ACTION_MOVE:
 				break;
@@ -208,14 +450,14 @@ public class MainActivity extends Activity {
 		public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 
 			System.out.println("changed");
-			inits();
+
 		}
 
 		@Override
 		public void surfaceCreated(SurfaceHolder holder) {
 
 			System.out.println("created");
-
+			inits();
 		}
 
 		@Override
@@ -232,46 +474,55 @@ public class MainActivity extends Activity {
 
 		@Override
 		public boolean onDown(MotionEvent e) {
-			//System.out.println("onDown Pressed" + ":" + e.getX() + ":" + e.getY());
+			// System.out.println("onDown Pressed" + ":" + e.getX() + ":" +
+			// e.getY());
 
 			return false;
 		}
 
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-			//System.out.println("OnFling Pressed" + ":" + velocityX + ":" + velocityY);
+			// System.out.println("OnFling Pressed" + ":" + velocityX + ":" +
+			// velocityY);
 			return false;
 		}
 
 		@Override
 		public void onLongPress(MotionEvent e) {
-			//System.out.println("OnLongPressed Pressed");
+			// System.out.println("OnLongPressed Pressed");
+			setMousePos((int) ((e.getX() - showThread.getMatrixBtmXPoint()) / showThread.getScale()),
+					(int) (e.getY() / showThread.getScale()));
 			clickRightMouse();
 		}
 
 		@Override
 		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-			//System.out.println("OnScroll Pressed" + ":" + distanceX + ":" + distanceY);
-			if (e2.getPointerCount()==1) {
+			// System.out.println("OnScroll Pressed" + ":" + distanceX + ":" +
+			// distanceY);
+			if (e2.getPointerCount() == 1) {
 				tmpMatrix.postTranslate(-distanceX, 0);
 				limitMatrix(tmpMatrix);
 				showThread.setMatrix(tmpMatrix);
 			}
-			if(e2.getPointerCount()>1)
-			{
-				onMiddleButtonMove(-(int)distanceY);
+			if (e2.getPointerCount() == 2) {
+				onMiddleButtonMove(-(int) distanceY);
+			}
+			if (e2.getPointerCount() == 3) {
+
+				onMouseMove(distanceX, distanceY);
+
 			}
 			return false;
 		}
 
 		@Override
 		public void onShowPress(MotionEvent e) {
-			//System.out.println("onShowPress Pressed");
+			// System.out.println("onShowPress Pressed");
 		}
 
 		@Override
 		public boolean onSingleTapUp(MotionEvent e) {
-			//System.out.println("onSingleTapUp Pressed");
+			// System.out.println("onSingleTapUp Pressed");
 			return true;
 		}
 
@@ -281,7 +532,7 @@ public class MainActivity extends Activity {
 
 		@Override
 		public boolean onSingleTapConfirmed(MotionEvent e) {
-			//System.out.println("onSingleTapConfirmed...");
+			// System.out.println("onSingleTapConfirmed...");
 			if (e.getPointerCount() == 1) {
 				setMousePos((int) ((e.getX() - showThread.getMatrixBtmXPoint()) / showThread.getScale()),
 						(int) (e.getY() / showThread.getScale()));
@@ -292,13 +543,13 @@ public class MainActivity extends Activity {
 
 		@Override
 		public boolean onDoubleTapEvent(MotionEvent e) {
-			//System.out.println("onDoubleTapEvent...");
+			// System.out.println("onDoubleTapEvent...");
 			return false;
 		}
 
 		@Override
 		public boolean onDoubleTap(MotionEvent e) {
-			//System.out.println("onDoubleTap...");
+			// System.out.println("onDoubleTap...");
 			if (e.getPointerCount() == 1) {
 				setMousePos((int) ((e.getX() - showThread.getMatrixBtmXPoint()) / showThread.getScale()),
 						(int) (e.getY() / showThread.getScale()));
@@ -309,117 +560,32 @@ public class MainActivity extends Activity {
 
 	}
 
-	
-	private void createFloatMenu()
-	{
-		// Set up the white button on the lower right corner
-				// more or less with default parameter
-				final ImageView fabIconNew = new ImageView(this);
-				fabIconNew.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_new_light));
-				int bigActionButtonSize = getResources().getDimensionPixelSize(R.dimen.big_action_button_size);
-				int bigActionButtonMargin = getResources().getDimensionPixelOffset(R.dimen.big_action_button_margin);
-				int bigActionButtonContentSize = getResources().getDimensionPixelSize(R.dimen.big_action_button_content_size);
-				int bigActionButtonContentMargin = getResources()
-						.getDimensionPixelSize(R.dimen.big_action_button_content_margin);
-				int bigActionMenuRadius = getResources().getDimensionPixelSize(R.dimen.big_action_menu_radius);
-				int smallSubActionButtonSize = getResources().getDimensionPixelSize(R.dimen.small_sub_action_button_size);
-				int smallSubActionButtonContentMargin = getResources()
-						.getDimensionPixelSize(R.dimen.small_sub_action_button_content_margin);
-
-				FloatingActionButton.LayoutParams bigParams = new FloatingActionButton.LayoutParams(bigActionButtonSize,
-						bigActionButtonSize);
-				bigParams.setMargins(bigActionButtonMargin, bigActionButtonMargin, bigActionButtonMargin,
-						bigActionButtonMargin);
-				fabIconNew.setLayoutParams(bigParams);
-
-				FloatingActionButton.LayoutParams fabIconNewParams = new FloatingActionButton.LayoutParams(
-						bigActionButtonContentSize, bigActionButtonContentSize);
-				fabIconNewParams.setMargins(bigActionButtonContentMargin, bigActionButtonContentMargin,
-						bigActionButtonContentMargin, bigActionButtonContentMargin);
-				final FloatingActionButton rightLowerButton = new FloatingActionButton.Builder(this)
-						.setContentView(fabIconNew, fabIconNewParams)
-						.setLayoutParams(bigParams)/*
-													 * .setBackgroundDrawable(R.drawable
-													 * .button_action_red_selector)
-													 * .setPosition(FloatingActionButton
-													 * .POSITION_BOTTOM_CENTER)
-													 */
-						.build();
-
-				SubActionButton.Builder rLSubBuilder = new SubActionButton.Builder(this);
-				/*
-				 * rLSubBuilder.setBackgroundDrawable(getResources().getDrawable(R.
-				 * drawable.button_action_blue_selector));
-				 */
-
-				FrameLayout.LayoutParams smallContentParams = new FrameLayout.LayoutParams(
-						FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
-				smallContentParams.setMargins(smallSubActionButtonContentMargin, smallSubActionButtonContentMargin,
-						smallSubActionButtonContentMargin, smallSubActionButtonContentMargin);
-				rLSubBuilder.setLayoutParams(smallContentParams);
-				FrameLayout.LayoutParams smallParams = new FrameLayout.LayoutParams(smallSubActionButtonSize,
-						smallSubActionButtonSize);
-				rLSubBuilder.setLayoutParams(smallParams);
-
-				ImageView rlIcon1 = new ImageView(this);
-				ImageView rlIcon2 = new ImageView(this);
-				ImageView rlIcon3 = new ImageView(this);
-				ImageView rlIcon4 = new ImageView(this);
-
-				rlIcon1.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_chat_light));
-				rlIcon2.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_camera_light));
-				rlIcon3.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_video_light));
-				rlIcon4.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_place_light));
-
-				
-				// Build the menu with default options: light theme, 90 degrees, 72dp
-				// radius.
-				// Set 4 default SubActionButtons
-				final FloatingActionMenu rightLowerMenu = new FloatingActionMenu.Builder(this)
-						.addSubActionView(rLSubBuilder.setContentView(rlIcon1, smallContentParams).build())
-						.addSubActionView(rLSubBuilder.setContentView(rlIcon2, smallContentParams).build())
-						.addSubActionView(rLSubBuilder.setContentView(rlIcon3, smallContentParams).build())
-						.addSubActionView(rLSubBuilder.setContentView(rlIcon4, smallContentParams).build())
-						.setRadius(bigActionMenuRadius)
-						/*.setStartAngle(-20)
-						.setEndAngle(-160)*/
-						.attachTo(rightLowerButton)
-						.build();
-
-				rlIcon1.setOnClickListener(new OnClickListener() {
-					
-					@Override
-					public void onClick(View v) {
-						// TODO Auto-generated method stub
-						Intent intent = new Intent(MainActivity.this, MouseActivity.class);
-						MainActivity.this.startActivity(intent);
-						
-					}
-				});
-				// Listen menu open and close events to animate the button content view
-				rightLowerMenu.setStateChangeListener(new FloatingActionMenu.MenuStateChangeListener() {
-					@Override
-					public void onMenuOpened(FloatingActionMenu menu) {
-						// Rotate the icon of rightLowerButton 45 degrees clockwise
-						fabIconNew.setRotation(0);
-						PropertyValuesHolder pvhR = PropertyValuesHolder.ofFloat(View.ROTATION, 45);
-						ObjectAnimator animation = ObjectAnimator.ofPropertyValuesHolder(fabIconNew, pvhR);
-						animation.start();
-					}
-
-					@Override
-					public void onMenuClosed(FloatingActionMenu menu) {
-						// Rotate the icon of rightLowerButton 45 degrees
-						// counter-clockwise
-						fabIconNew.setRotation(45);
-						PropertyValuesHolder pvhR = PropertyValuesHolder.ofFloat(View.ROTATION, 0);
-						ObjectAnimator animation = ObjectAnimator.ofPropertyValuesHolder(fabIconNew, pvhR);
-						animation.start();
-					}
-				});
-
+	private void sendKeyMessage(MessageType keyType, SpecialKeys key) {
+		SendPacket senPacket = new SendPacket();
+		senPacket.setMsgType(keyType);
+		senPacket.setSplKeys(key);
+		tcpNet.sendMessage(senPacket);
 	}
-	
+
+	private void sendTextMessage(String message) {
+		SendPacket senPacket = new SendPacket();
+		senPacket.setMsgType(MessageType.TEXT);
+		senPacket.setStrValue(message);
+		tcpNet.sendMessage(senPacket);
+	}
+
+	private void startRecPic() {
+		SendPacket senPacket = new SendPacket();
+		senPacket.setMsgType(MessageType.START_PIC);
+		tcpNet.sendMessage(senPacket);
+	}
+
+	private void stopRecPic() {
+		SendPacket senPacket = new SendPacket();
+		senPacket.setMsgType(MessageType.STOP_PIC);
+		tcpNet.sendMessage(senPacket);
+	}
+
 	private void clickRightMouse() {
 		SendPacket senPacket = new SendPacket();
 		senPacket.setMsgType(MessageType.MOUSE_RIGHT_CLICK);
@@ -446,36 +612,35 @@ public class MainActivity extends Activity {
 		tcpNet.sendMessage(senPacket);
 	}
 
-	private void onMiddleButtonDown(MotionEvent ev) {
-		ly = ev.getY();
-
-	}
-
 	private void onMiddleButtonMove(int my) {
 		if (my > 3 || my < -3) { // 减少发送次数 滑轮移动慢点
 			SendPacket senPacket = new SendPacket();
 			senPacket.setMsgType(MessageType.MOUSE_WHEEL);
-			senPacket.setIntValue1( my);
+			senPacket.setIntValue1(my);
 			tcpNet.sendMessage(senPacket);
 		}
 
 	}
 
-	private void onMouseMove(MotionEvent ev) {
+	private void MouseLeftDown() {
+		SendPacket senPacket = new SendPacket();
+		senPacket.setMsgType(MessageType.MOUSE_LEFT_DOWN);
+		TcpNet.getInstance().sendMessage(senPacket);
+	}
 
-		float x = ev.getX();
-		int mx = (int) (x - movePoint.x); // 当前鼠标位置 - 上次鼠标的位置
-		movePoint.x = x; // 把当前鼠标的位置付给lx 以备下次使用
-		float y = ev.getY();
-		int my = (int) (y - movePoint.y);
-		movePoint.y = y;
-		if ((Math.abs(mx) > 1 && my != 0) || (mx != 0 && Math.abs(my) > 1)) {
-			SendPacket senPacket = new SendPacket();
-			senPacket.setMsgType(MessageType.MOUSE_MOVE);
-			senPacket.setIntValue1(mx);
-			senPacket.setIntValue2(my);
-			tcpNet.sendMessage(senPacket);
-		}
+	private void MouseLeftUp() {
+		SendPacket senPacket = new SendPacket();
+		senPacket.setMsgType(MessageType.MOUSE_LEFT_UP);
+		TcpNet.getInstance().sendMessage(senPacket);
+	}
+
+	private void onMouseMove(float mx, float my) {
+
+		SendPacket senPacket = new SendPacket();
+		senPacket.setMsgType(MessageType.MOUSE_MOVE);
+		senPacket.setIntValue1(-(int) mx);
+		senPacket.setIntValue2(-(int) my);
+		TcpNet.getInstance().sendMessage(senPacket);
 
 	}
 

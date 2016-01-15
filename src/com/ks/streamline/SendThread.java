@@ -41,6 +41,14 @@ public class SendThread extends Thread {
 				MessageType msgType = sendPacket.getMsgType();
 				//System.out.println("on "+msgType+":"+msgType.getValue());
 				switch (msgType) {
+				case START_PIC:
+					dataOutputStream.writeByte((byte)msgType.getValue());
+					dataOutputStream.flush();
+					break;
+				case STOP_PIC:
+					dataOutputStream.writeByte((byte)msgType.getValue());
+					dataOutputStream.flush();
+					break;
 				case MOUSE_RIGHT_CLICK:
 					dataOutputStream.writeByte((byte)msgType.getValue());
 					dataOutputStream.flush();
@@ -59,6 +67,22 @@ public class SendThread extends Thread {
 					dataOutputStream.writeInt((int)sendPacket.getIntValue2());
 					dataOutputStream.flush();
 					break;
+				case MOUSE_LEFT_DOWN:
+					dataOutputStream.writeByte((byte)msgType.getValue());
+					dataOutputStream.flush();
+					break;
+				case MOUSE_LEFT_UP:
+					dataOutputStream.writeByte((byte)msgType.getValue());
+					dataOutputStream.flush();
+					break;
+				case MOUSE_RIGHT_DOWN:
+					dataOutputStream.writeByte((byte)msgType.getValue());
+					dataOutputStream.flush();
+					break;
+				case MOUSE_RIGHT_UP:
+					dataOutputStream.writeByte((byte)msgType.getValue());
+					dataOutputStream.flush();
+					break;
 				case MOUSE_MOVE:
 					dataOutputStream.writeByte((byte)msgType.getValue());
 					dataOutputStream.writeInt((int)sendPacket.getIntValue1());
@@ -66,6 +90,61 @@ public class SendThread extends Thread {
 					dataOutputStream.flush();
 					break;
 				case MOUSE_WHEEL:
+					dataOutputStream.writeByte((byte)msgType.getValue());
+					dataOutputStream.writeInt((int)sendPacket.getIntValue1());
+					dataOutputStream.flush();
+					break;
+				case KEY_DOWN:
+					dataOutputStream.writeByte((byte)msgType.getValue());
+					dataOutputStream.writeByte((byte)sendPacket.getSplKeys().getValue());
+					dataOutputStream.flush();
+					break;
+				case KEY_UP:
+					dataOutputStream.writeByte((byte)msgType.getValue());
+					dataOutputStream.writeByte((byte)sendPacket.getSplKeys().getValue());
+					dataOutputStream.flush();
+					break;
+				case TEXT:
+					dataOutputStream.writeByte((byte)msgType.getValue());
+					byte[] strByte=sendPacket.getStrValue().getBytes();
+					int len=strByte.length;
+					dataOutputStream.writeInt(len);
+					dataOutputStream.write(strByte,0,len);
+					dataOutputStream.flush();
+					break;
+				case FUN_LOCK:
+					dataOutputStream.writeByte((byte)msgType.getValue());
+					dataOutputStream.flush();
+					break;
+				case FUN_LOGOUT:
+					dataOutputStream.writeByte((byte)msgType.getValue());
+					dataOutputStream.flush();
+					break;
+				case FUN_MANAGER:
+					dataOutputStream.writeByte((byte)msgType.getValue());
+					dataOutputStream.flush();
+					break;
+				case FUN_RESTART:
+					dataOutputStream.writeByte((byte)msgType.getValue());
+					dataOutputStream.flush();
+					break;
+				case FUN_SHOW_DESKTOP:
+					dataOutputStream.writeByte((byte)msgType.getValue());
+					dataOutputStream.flush();
+					break;
+				case FUN_SHUTDOWN:
+					dataOutputStream.writeByte((byte)msgType.getValue());
+					dataOutputStream.flush();
+					break;
+				case FUN_SHUTDOWN_CANCEL:
+					dataOutputStream.writeByte((byte)msgType.getValue());
+					dataOutputStream.flush();
+					break;
+				case FUN_SLEEP:
+					dataOutputStream.writeByte((byte)msgType.getValue());
+					dataOutputStream.flush();
+					break;
+				case FUN_SHUTDOWN_TIME:
 					dataOutputStream.writeByte((byte)msgType.getValue());
 					dataOutputStream.writeInt((int)sendPacket.getIntValue1());
 					dataOutputStream.flush();

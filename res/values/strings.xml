@@ -9,5 +9,7 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_index">IndexActivity</string>
     <string name="title_activity_mouse">MouseActivity</string>
+    <string name="title_activity_game_control">GameControlActivity</string>
+    <string name="title_activity_controlpc">ControlPCActivity</string>
 
 </resources>

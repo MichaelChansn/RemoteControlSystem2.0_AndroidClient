@@ -1,6 +1,6 @@
 package com.ks.activitys;
 
-import com.ks.testndk.R;
+import com.ks.application.R;
 
 import android.app.Activity;
 import android.content.Intent;
