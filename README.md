@@ -1,2 +1,3 @@
-# TestNDK
-this is a test project about android NDK, this project test the NDK process Bitmap , And find that Using c++/JNI is more fast than canvas,it is a about 85 times faster
+# RemoteControlSystem2.0
+Find that Using c++/JNI is more fast than canvas,it is a about 85 times faster
+This is an android remote control PC project，and in this project is just a client,the server is in "RemoteControlSystem2.0_PCServer" project .this project use the NDK/JNI process Bitmap , can control your PC in your Android phone.mouse control,game control,send text to pc,etc....
