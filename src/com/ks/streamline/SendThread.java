@@ -41,6 +41,10 @@ public class SendThread extends Thread {
 				MessageType msgType = sendPacket.getMsgType();
 				//System.out.println("on "+msgType+":"+msgType.getValue());
 				switch (msgType) {
+				case EXIT:
+					dataOutputStream.writeByte((byte)msgType.getValue());
+					dataOutputStream.flush();
+					break;
 				case START_PIC:
 					dataOutputStream.writeByte((byte)msgType.getValue());
 					dataOutputStream.flush();
@@ -110,6 +114,14 @@ public class SendThread extends Thread {
 					int len=strByte.length;
 					dataOutputStream.writeInt(len);
 					dataOutputStream.write(strByte,0,len);
+					dataOutputStream.flush();
+					break;
+				case HOST_NANME:
+					dataOutputStream.writeByte((byte)msgType.getValue());
+					byte[] strByte2=sendPacket.getStrValue().getBytes();
+					int len2=strByte2.length;
+					dataOutputStream.writeInt(len2);
+					dataOutputStream.write(strByte2,0,len2);
 					dataOutputStream.flush();
 					break;
 				case FUN_LOCK:

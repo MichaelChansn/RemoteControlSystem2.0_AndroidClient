@@ -7,13 +7,20 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import com.ks.application.R;
 import com.ks.myexceptions.FileLogger;
 import com.ks.myexceptions.NetExceptions;
+import com.ks.net.enums.MessageEnums.MessageType;
 import com.ks.streamline.BitmapWithCursor;
 import com.ks.streamline.ReceiveThread;
 import com.ks.streamline.Recpacket;
 import com.ks.streamline.SendPacket;
 import com.ks.streamline.SendThread;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 
 public class TcpNet {
 
@@ -119,6 +126,39 @@ public class TcpNet {
 
 	public boolean isConnecting() {
 		return this.isConnecting;
+	}
+
+	public void sendHostMessage() {
+		String host = android.os.Build.BRAND + "_" + android.os.Build.MODEL;
+		SendPacket senPacket = new SendPacket();
+		senPacket.setMsgType(MessageType.HOST_NANME);
+		senPacket.setStrValue(host);
+		this.sendMessage(senPacket);
+	}
+
+	public void sendExitMeaasge() {
+		SendPacket senPacket = new SendPacket();
+		senPacket.setMsgType(MessageType.EXIT);
+		this.sendMessage(senPacket);
+	}
+
+	public void ExitApp(final Context context) {
+		new AlertDialog.Builder(context).setTitle("Exit...").setMessage(context.getString(R.string.app_exit_message))
+				.setIcon(R.drawable.eva_icon)
+				.setPositiveButton(context.getString(R.string.app_confirm), new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialoginterface, int i) {
+						TcpNet.getInstance().sendExitMeaasge();
+						((Activity) context).finish();
+						TcpNet.getInstance().disConnect();
+						// 退出后台线程,以及销毁静态变量
+						System.exit(0);
+					}
+				}).setNeutralButton(context.getString(R.string.app_cancel), new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface arg0, int arg1) {
+					}
+
+				}).show();
+
 	}
 
 	public void disConnect() {

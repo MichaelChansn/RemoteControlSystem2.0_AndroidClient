@@ -57,7 +57,7 @@ public class MainActivity extends Activity {
 	private Button specalKeyClose;
 	private RelativeLayout speicalKeys;
 
-	private Button buttonOK;
+	private Button buttonShowDesktop;
 	private Button backspace;
 	private Button enter;
 
@@ -127,7 +127,7 @@ public class MainActivity extends Activity {
 	}
 
 	private void findSpeialKeyViews() {
-		buttonOK = (Button) findViewById(R.id.button_OK);
+		buttonShowDesktop = (Button) findViewById(R.id.button_ShowDesktop);
 		backspace = (Button) findViewById(R.id.button_Backspace);
 		enter = (Button) findViewById(R.id.button_Enter);
 
@@ -192,6 +192,7 @@ public class MainActivity extends Activity {
 			}
 		});
 		edSendText.addTextChangedListener(new TextWatcher() {
+		
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -199,7 +200,7 @@ public class MainActivity extends Activity {
 				System.out.println("onTextChanged得到的数据是：——>" + edSendText.getText().toString());
 
 			}
-
+			
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 				// TODO Auto-generated method stub
@@ -236,7 +237,7 @@ public class MainActivity extends Activity {
 				return true;
 			}
 		});
-		buttonOK.setOnClickListener(specialKeyLinstener);
+		buttonShowDesktop.setOnClickListener(specialKeyLinstener);
 		backspace.setOnClickListener(specialKeyLinstener);
 		enter.setOnClickListener(specialKeyLinstener);
 
@@ -642,6 +643,13 @@ public class MainActivity extends Activity {
 		senPacket.setIntValue2(-(int) my);
 		TcpNet.getInstance().sendMessage(senPacket);
 
+	}
+	
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		//super.onBackPressed();
+		tcpNet.ExitApp(MainActivity.this);
 	}
 
 }

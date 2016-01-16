@@ -1,5 +1,6 @@
 package com.ks.activitys;
 
+import com.ks.application.KSApplication;
 import com.ks.application.R;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
@@ -7,6 +8,7 @@ import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
@@ -91,11 +93,11 @@ public class FloatMenu {
 		rlIcon5.setId(ID5);
 
 		
-		rlIcon1.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_action_chat_light));
-		rlIcon2.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_action_camera_light));
-		rlIcon3.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_action_video_light));
-		rlIcon4.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_action_place_light));
-		rlIcon5.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_action_place_light));
+		rlIcon1.setImageDrawable(context.getResources().getDrawable(R.drawable.mouse));
+		rlIcon2.setImageDrawable(context.getResources().getDrawable(R.drawable.softbeyboard));
+		rlIcon3.setImageDrawable(context.getResources().getDrawable(R.drawable.keyboard));
+		rlIcon4.setImageDrawable(context.getResources().getDrawable(R.drawable.gamecontroller));
+		rlIcon5.setImageDrawable(context.getResources().getDrawable(R.drawable.controlpc));
 
 		
 		// Build the menu with default options: light theme, 90 degrees, 72dp
@@ -152,10 +154,12 @@ public class FloatMenu {
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
 			System.out.println("ID"+v.getId());
+			KSApplication.Vibrate(context, 10);
 			switch (v.getId()) {
 			case ID1:
 				Intent intent = new Intent(context, MouseActivity.class);
 				context.startActivity(intent);
+				((Activity) context).overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
 				break;
 			case ID2:
 				((MainActivity)context).showIME();
@@ -169,10 +173,12 @@ public class FloatMenu {
 			case ID4:
 				Intent intent2 = new Intent(context, GameControlActivity.class);
 				context.startActivity(intent2);
+				((Activity) context).overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
 				break;
 			case ID5:
 				Intent intent3 = new Intent(context, ControlPCActivity.class);
 				context.startActivity(intent3);
+				((Activity) context).overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
 				break;
 			default:
 				break;

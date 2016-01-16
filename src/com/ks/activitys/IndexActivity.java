@@ -61,7 +61,9 @@ public class IndexActivity extends Activity {
 		btnConnectServer = (Button) findViewById(R.id.buttonConnectServer);
 		lvServerList = (ListView) findViewById(R.id.listViewServerList);
 		edServerIP = (EditText) findViewById(R.id.editTextServerIP);
+		edServerIP.clearFocus();
 		edServerPort = (EditText) findViewById(R.id.editTextServerPort);
+		edServerPort.clearFocus();
 		tvIndexTitle = (TextView) findViewById(R.id.textViewIndexTitle);
 		servers = new ArrayList<String>();
 		handler = new IndexHandler(IndexActivity.this);
@@ -83,7 +85,9 @@ public class IndexActivity extends Activity {
 			// TODO Auto-generated method stub
 			switch (v.getId()) {
 			case R.id.buttonScanServer:
-				dialog = ProgressDialog.show(IndexActivity.this, "正在扫描", "请稍后...");
+				dialog = ProgressDialog.show(IndexActivity.this,
+						IndexActivity.this.getString(R.string.udp_scan_message_title),
+						IndexActivity.this.getString(R.string.udp_scan_message_content));
 				dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
 					public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
 						if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -200,8 +204,9 @@ public class IndexActivity extends Activity {
 				if (((IndexActivity) theActivity).dialog != null) {
 					((IndexActivity) theActivity).dialog.dismiss();
 					((IndexActivity) theActivity).dialog = null;
-					new AlertDialog.Builder(theActivity).setIcon(android.R.drawable.stat_notify_error).setTitle("扫描失败！")
-							.setMessage("请检查您的网络状况，稍后再试。。。！")
+					new AlertDialog.Builder(theActivity).setIcon(android.R.drawable.stat_notify_error)
+							.setTitle(theActivity.getString(R.string.udp_scan_fail_title))
+							.setMessage(theActivity.getString(R.string.udp_scan_fail_message))
 							.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 
 								@Override
@@ -214,7 +219,9 @@ public class IndexActivity extends Activity {
 				}
 				break;
 			case CONNECTING:
-				((IndexActivity) theActivity).dialog = ProgressDialog.show(theActivity, "正在连接", "请稍后...");
+				((IndexActivity) theActivity).dialog = ProgressDialog.show(theActivity,
+						theActivity.getString(R.string.tcp_scan_message_title),
+						theActivity.getString(R.string.tcp_scan_message_content));
 				((IndexActivity) theActivity).dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
 
 					public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
@@ -234,9 +241,12 @@ public class IndexActivity extends Activity {
 					((IndexActivity) theActivity).dialog.dismiss();
 					((IndexActivity) theActivity).dialog = null;
 				}
-				Toast.makeText(theActivity, "连接成功", Toast.LENGTH_SHORT).show();
+				tcpNet.sendHostMessage();
+				Toast.makeText(theActivity, theActivity.getString(R.string.tcp_connect_ok), Toast.LENGTH_SHORT).show();
 				Intent intent = new Intent((IndexActivity) theActivity, MainActivity.class);
 				((IndexActivity) theActivity).startActivity(intent);
+				((IndexActivity) theActivity).overridePendingTransition(android.R.anim.fade_in,
+						android.R.anim.fade_out);
 				((IndexActivity) theActivity).finish();
 				break;
 			case CONNECTFAILE:
@@ -244,32 +254,40 @@ public class IndexActivity extends Activity {
 					((IndexActivity) theActivity).dialog.dismiss();
 					((IndexActivity) theActivity).dialog = null;
 				}
-				new AlertDialog.Builder(theActivity).setIcon(android.R.drawable.stat_notify_error).setTitle("连接失败！")
-						.setMessage("请检查网络和IP地址是否输入错误！").setPositiveButton("确定", new DialogInterface.OnClickListener() {
+				new AlertDialog.Builder(theActivity).setIcon(android.R.drawable.stat_notify_error)
+						.setTitle(theActivity.getString(R.string.tcp_connect_fail))
+						.setMessage(theActivity.getString(R.string.tcp_connect_fail_message))
+						.setPositiveButton(theActivity.getString(R.string.positive_button),
+								new DialogInterface.OnClickListener() {
 
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								// TODO Auto-generated method stub
-								dialog.dismiss();
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										// TODO Auto-generated method stub
+										dialog.dismiss();
 
-							}
-						}).create().show();
+									}
+								})
+						.create().show();
 				break;
 			case CONNECTTIMEOUT:
 				if (((IndexActivity) theActivity).dialog != null) {
 					((IndexActivity) theActivity).dialog.dismiss();
 					((IndexActivity) theActivity).dialog = null;
 				}
-				new AlertDialog.Builder(theActivity).setIcon(android.R.drawable.stat_notify_error).setTitle("连接超时！")
-						.setMessage("网络貌似不通畅，稍后再试！").setPositiveButton("确定", new DialogInterface.OnClickListener() {
+				new AlertDialog.Builder(theActivity).setIcon(android.R.drawable.stat_notify_error)
+						.setTitle(theActivity.getString(R.string.tcp_connect_timeout))
+						.setMessage(theActivity.getString(R.string.tcp_connect_timeout_message))
+						.setPositiveButton(theActivity.getString(R.string.positive_button),
+								new DialogInterface.OnClickListener() {
 
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								// TODO Auto-generated method stub
-								dialog.dismiss();
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										// TODO Auto-generated method stub
+										dialog.dismiss();
 
-							}
-						}).create().show();
+									}
+								})
+						.create().show();
 				break;
 			case WRONGCODE:
 				break;

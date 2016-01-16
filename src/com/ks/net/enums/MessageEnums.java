@@ -3,6 +3,16 @@ package com.ks.net.enums;
 public class MessageEnums {
 
 	public enum MessageType {
+		HOST_NANME{
+			public byte getValue() {
+				return (byte) 0x00;
+			}
+		},
+		EXIT{
+			public byte getValue() {
+				return (byte) 0x02;
+			}
+		},
 		START_PIC {
 			public byte getValue() {
 				return (byte) 0x10;
@@ -133,6 +143,12 @@ public class MessageEnums {
 			MessageType ret = null;
 			switch (value) {
 			case 0x00:
+				ret = MessageType.HOST_NANME;
+				break;
+			case 0x02:
+				ret = MessageType.EXIT;
+				break;
+			case 0x36:
 				ret = MessageType.MOUSE_RIGHT_CLICK;
 				break;
 			case 0x10:

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bizhi"
+    android:background="@drawable/background"
     android:orientation="vertical" >
 
     <TableRow
@@ -10,7 +10,7 @@
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
        
-        android:layout_weight="5"
+        android:layout_weight="5.1"
         android:gravity="center_horizontal" >
 
         <TextView
@@ -38,7 +38,7 @@
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="10dp"
-            android:layout_weight="1" >
+            android:layout_weight="1.2" >
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -46,30 +46,32 @@
                 android:layout_weight="1" >
 
                 <ImageButton
-                    android:id="@+id/imageButton_guanji"
+                    android:id="@+id/imageButton_shutdown"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/guanjiweian" />
+                    android:background="@drawable/pc_control_action_shutdown_selector" />
 
                 <ImageButton
-                    android:id="@+id/imageButton_chongqi"
+                    android:id="@+id/imageButton_reboot"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/chongqiweian" />
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/pc_control_action_reboot_selector" />
 
                 <ImageButton
-                    android:id="@+id/imageButton_suoding"
+                    android:id="@+id/imageButton_lockwindows"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginRight="10dp"
                     android:layout_weight="1"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/suodingweian" />
+                    android:background="@drawable/pc_control_action_lockup_selector" />
 
             </LinearLayout>
 
@@ -80,8 +82,7 @@
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="10dp"
-            
-            android:layout_weight="1" >
+            android:layout_weight="1.2" >
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -89,30 +90,32 @@
                 android:layout_weight="1" >
 
                 <ImageButton
-                    android:id="@+id/imageButton_zhuxiao"
+                    android:id="@+id/imageButton_logout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/zhuxiaoweian" />
+                    android:background="@drawable/pc_control_action_logout_selector" />
 
                 <ImageButton
-                    android:id="@+id/imageButton_daiji"
+                    android:id="@+id/imageButton_sleep"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/daijiweian" />
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/pc_control_action_sleep_selector" />
 
                 <ImageButton
-                    android:id="@+id/imageButton_renwuguanli"
+                    android:id="@+id/imageButton_taskmanager"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginRight="10dp"
                     android:layout_weight="1"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/renwuguanliweian" />
+                    android:background="@drawable/pc_control_action_taskmanager_selector" />
 
             </LinearLayout>
 
@@ -151,7 +154,7 @@
         android:paddingTop="-30dp" >
 
         <EditText
-            android:id="@+id/editText_guanjishike"
+            android:id="@+id/editText_shutdowntime"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_marginLeft="10dp"
@@ -173,30 +176,33 @@
         android:id="@+id/tableRow6"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:layout_weight="5.3" >
+        android:layout_weight="5.6" >
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_weight="1" >
+            android:orientation="horizontal"
+            android:layout_weight="1.2" >
 
             <ImageButton
-                android:id="@+id/imageButton_xuanzeshijian"
+                android:id="@+id/imageButton_picktime"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
                 android:layout_weight="1"
-                android:scaleType="fitXY"
-                android:src="@drawable/xuanzeshijianweian" />
+                android:scaleType="centerCrop"
+                android:background="@drawable/pc_control_action_picktime_selector" />
 
             <ImageButton
-                android:id="@+id/imageButton_quedingguanji"
+                android:id="@+id/imageButton_confirm"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_marginRight="10dp"
+                android:layout_marginLeft="5dp"
                 android:layout_weight="1"
-                android:scaleType="fitXY"
-                android:src="@drawable/quedingguangjiweian" />
+                android:scaleType="centerCrop"
+                android:background="@drawable/confirmshutdown" />
 
         </LinearLayout>
 

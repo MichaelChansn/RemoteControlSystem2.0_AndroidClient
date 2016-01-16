@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">TestNDK</string>
+    <string name="app_name">Remote Control PC System</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_welcome">WelcomeActivity</string>
@@ -11,5 +11,26 @@
     <string name="title_activity_mouse">MouseActivity</string>
     <string name="title_activity_game_control">GameControlActivity</string>
     <string name="title_activity_controlpc">ControlPCActivity</string>
+    <string name="positive_button">OK</string>
+    <string name="app_exit_message">Do You Want To Exit?</string>
+    <string name="app_confirm">OK</string>
+    <string name="app_cancel">Cancel</string>
+    <string name="welcome_message">Remote Control PC System</string>
+    <string name="welcome_message_title">Android</string>
+    <string name="copyright_message">©2016 NanKai University\nAuthor: KS</string>
+    <string name="udp_scan_message_title">Udp Scanning...</string>
+    <string name="udp_scan_message_content">Please Wait For A Second...</string>
+    <string name="udp_scan_fail_title">Scanning Failed</string>
+    <string name="udp_scan_fail_message">Please Check Your Network Connection\n Try Again Later...</string>
+    <string name="tcp_scan_message_title">Connect...</string>
+    <string name="tcp_scan_message_content">Connecting To Server...</string>
+    <string name="tcp_connect_ok">Connection is OK</string>
+    <string name="tcp_connect_fail">Connection Is Failed</string>
+    <string name="tcp_connect_fail_message">Please Check Your Server IP And Port Is Right...</string>
+    <string name="tcp_connect_timeout">Connection Timeout</string>
+    <string name="tcp_connect_timeout_message">Please Check Your Network Connection\n Try Again Later</string>
+    
+    
+    
 
 </resources>

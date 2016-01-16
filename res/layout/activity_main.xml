@@ -102,11 +102,11 @@
                                 android:text="回车" />
 
                             <Button
-                                android:id="@+id/button_OK"
+                                android:id="@+id/button_ShowDesktop"
                                 android:layout_width="match_parent"
                                 android:layout_height="fill_parent"
                                 android:layout_weight="1"
-                                android:text="确定" />
+                                android:text="桌面" />
                         </LinearLayout>
                     </TableRow>
 

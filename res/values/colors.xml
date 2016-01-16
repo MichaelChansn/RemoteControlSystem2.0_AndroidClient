@@ -7,6 +7,7 @@
 	<color name="fs">#FF34B3</color>
 	<color name="black">#000000</color>
 	<color name="freshred">#ff0066</color>
+	<color name="freshred_press">#af0066</color>
 	<color name="halfalpha">#0f000000</color>
 	<color name="halfWhite">#7fffffff</color>
 	<color name="gray">#ffEAEAE9</color>

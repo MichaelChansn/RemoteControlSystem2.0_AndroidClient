@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.ks.activitys.GameControlActivity"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/bizhi"
-    android:orientation="vertical" >
+    android:background="@drawable/background"
+    android:orientation="vertical"
+    tools:context="com.ks.activitys.GameControlActivity" >
 
     <TableRow
         android:id="@+id/tableRow1"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
-        android:layout_weight="1" >
+        android:layout_marginTop="3dp"
+        android:layout_weight="1.02" >
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -28,39 +27,36 @@
                 android:layout_marginTop="35dp"
                 android:layout_weight="1"
                 android:scaleType="centerCrop"
-                android:src="@drawable/a"
                 android:visibility="invisible" />
 
             <ImageButton
                 android:id="@+id/imageButton_leftdown"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="35dp"
                 android:layout_marginLeft="15dp"
+                android:layout_marginTop="35dp"
                 android:layout_weight="1"
-                android:scaleType="centerCrop"
-                android:src="@drawable/zuoshangweian" />
+                android:background="@drawable/game_leftdown_action_selector"
+                android:scaleType="centerCrop" />
 
             <ImageButton
                 android:id="@+id/imageButton_left"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                
-                 android:layout_marginLeft="10dp"
+                android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="0.8"
-                android:scaleType="fitXY"
-                android:src="@drawable/shangweian" />
+                android:background="@drawable/game_left_action_selector"
+                android:scaleType="fitXY" />
 
             <ImageButton
                 android:id="@+id/imageButton_leftup"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-               android:layout_marginTop="35dp"
-               android:layout_marginRight="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="35dp"
                 android:layout_weight="1"
-                android:scaleType="centerCrop"
-                android:src="@drawable/youshangweian" />
+                android:background="@drawable/game_leftup_action_selector" />
 
             <ImageButton
                 android:id="@+id/imageButton5"
@@ -70,12 +66,8 @@
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="35dp"
                 android:layout_weight="1"
-                android:scaleType="centerCrop"
-                android:src="@drawable/a"
                 android:visibility="invisible" />
-
         </LinearLayout>
-
     </TableRow>
 
     <TableRow
@@ -96,18 +88,16 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="30dp"
                 android:layout_weight="1"
-                android:scaleType="centerCrop"
-                android:src="@drawable/zuoweian" />
+                android:background="@drawable/game_down_action_selector" />
 
             <ImageButton
-                android:id="@+id/imageButton_zhingjian"
+                android:id="@+id/imageButton_leftmiddle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
-                android:background="@drawable/zhongjian"
-                android:scaleType="fitXY" />
+                android:background="@drawable/game_middle_action_selector" />
 
             <ImageButton
                 android:id="@+id/imageButton_up"
@@ -115,11 +105,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginRight="30dp"
                 android:layout_weight="1"
-                android:scaleType="centerCrop"
-                android:src="@drawable/you_weian" />
-
+                android:background="@drawable/game_up_action_selector" />
         </LinearLayout>
-
     </TableRow>
 
     <TableRow
@@ -140,10 +127,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="35dp"
-                
                 android:layout_weight="1"
-                android:scaleType="centerCrop"
-                android:src="@drawable/kaishiweian" />
+                android:background="@drawable/game_start_action_selector" />
 
             <ImageButton
                 android:id="@+id/imageButton_rightdown"
@@ -152,8 +137,7 @@
                 android:layout_marginBottom="35dp"
                 android:layout_marginLeft="15dp"
                 android:layout_weight="1"
-                android:scaleType="centerCrop"
-                android:src="@drawable/zuoxiaweian" />
+                android:background="@drawable/game_rightdown_action_selector" />
 
             <ImageButton
                 android:id="@+id/imageButton_right"
@@ -162,18 +146,16 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="0.8"
-                android:scaleType="fitXY"
-                android:src="@drawable/xiaweian" />
+                android:background="@drawable/game_right_action_selector" />
 
             <ImageButton
                 android:id="@+id/imageButton_rightup"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="35dp"
-               android:layout_marginRight="15dp"
+                android:layout_marginRight="15dp"
                 android:layout_weight="1"
-                android:scaleType="centerCrop"
-                android:src="@drawable/youxiaweian" />
+                android:background="@drawable/game_rightup_action_selector" />
 
             <ImageButton
                 android:id="@+id/imageButton_space"
@@ -183,11 +165,8 @@
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="35dp"
                 android:layout_weight="1"
-                android:background="@drawable/konggeweian"
-                android:scaleType="fitXY" />
-
+                android:background="@drawable/game_space_action_selector" />
         </LinearLayout>
-
     </TableRow>
 
     <TableRow
@@ -206,11 +185,10 @@
                 android:id="@+id/imageButton_stop"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-               android:layout_marginLeft="15dp"
                 android:layout_marginBottom="40dp"
+                android:layout_marginLeft="15dp"
                 android:layout_weight="1"
-                android:scaleType="centerCrop"
-                android:src="@drawable/tingzhiweian" />
+                android:background="@drawable/game_stop_action_selector" />
 
             <ImageButton
                 android:id="@+id/imageButton2"
@@ -220,7 +198,6 @@
                 android:layout_marginTop="35dp"
                 android:layout_weight="1"
                 android:scaleType="centerCrop"
-                android:src="@drawable/a"
                 android:visibility="invisible" />
 
             <ImageButton
@@ -230,8 +207,8 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="0.8"
-                android:scaleType="fitXY"
-                android:src="@drawable/d" />
+                android:background="@drawable/game_d_action_selector"
+                android:scaleType="fitXY" />
 
             <ImageButton
                 android:id="@+id/imageButton3"
@@ -241,7 +218,6 @@
                 android:layout_marginTop="35dp"
                 android:layout_weight="1"
                 android:scaleType="centerCrop"
-                android:src="@drawable/a"
                 android:visibility="invisible" />
 
             <ImageButton
@@ -252,11 +228,8 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="15dp"
                 android:layout_weight="1"
-                android:background="@drawable/huicheweian"
-                android:scaleType="fitXY" />
-
+                android:background="@drawable/game_enter_action_selector" />
         </LinearLayout>
-
     </TableRow>
 
     <TableRow
@@ -277,19 +250,18 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="5dp"
-              
                 android:layout_weight="1"
-                android:scaleType="centerCrop"
-                android:src="@drawable/c" />
+                android:background="@drawable/game_c_action_selector"
+                android:scaleType="centerCrop" />
 
             <ImageButton
-                android:id="@+id/imageButton_leftmouse"
+                android:id="@+id/imageButton_rightMiddle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-               android:layout_marginLeft="10dp"
-               android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_weight="1"
-                android:background="@drawable/zhongjianshubiao" />
+                android:background="@drawable/game_rightmiddle_action_selector" />
 
             <ImageButton
                 android:id="@+id/imageButton_A"
@@ -298,11 +270,10 @@
                 android:layout_marginRight="30dp"
                 android:layout_marginTop="5dp"
                 android:layout_weight="1"
-                android:scaleType="centerCrop"
-                android:src="@drawable/a" />
+                android:background="@drawable/game_a_action_selector"
+                android:scaleType="centerCrop" />
 
         </LinearLayout>
-
     </TableRow>
 
     <TableRow
@@ -323,7 +294,6 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:scaleType="fitXY"
-                android:src="@drawable/a"
                 android:visibility="invisible" />
 
             <ImageButton
@@ -333,25 +303,21 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
-                android:scaleType="fitXY"
-                android:src="@drawable/b" />
-
-            <ImageButton
-                android:id="@+id/imageButton_kaizhongli"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginRight="15dp"
-                android:layout_marginLeft="60dp"
-                android:layout_marginTop="35dp"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/kaizhongli"
+                android:background="@drawable/game_b_action_selector"
                 android:scaleType="fitXY" />
 
-         
-
+            <ImageButton
+                android:id="@+id/imageButton_gravity"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="60dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="35dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_open"
+                android:scaleType="fitXY" />
         </LinearLayout>
-
     </TableRow>
 
 </LinearLayout>

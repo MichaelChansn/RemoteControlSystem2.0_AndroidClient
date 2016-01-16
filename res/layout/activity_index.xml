@@ -5,6 +5,8 @@
     android:background="@color/gray"
     android:fitsSystemWindows="true"
     android:gravity="fill"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context="com.ks.activitys.IndexActivity" >
 
         <EditText
@@ -51,7 +53,10 @@
             android:layout_alignBottom="@+id/buttonScanServer"
             android:layout_alignParentRight="true"
             android:layout_marginRight="13dp"
-            android:text="Connect Server" />
+            android:background="@drawable/button_scan_action_selector"
+            android:text="Connect Server"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/buttonScanServer"
@@ -61,7 +66,10 @@
             android:layout_below="@+id/editTextServerPort"
             android:layout_marginLeft="13dp"
             android:layout_marginTop="15dp"
-            android:text="Scan Server" />
+            android:background="@drawable/button_scan_action_selector"
+            android:text="Scan Server"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
 
         <ListView
             android:id="@+id/listViewServerList"
@@ -78,7 +86,7 @@
             android:layout_below="@+id/buttonConnectServer"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="15dp"
-            android:text="Server Online"
+            android:text="Servers Online"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

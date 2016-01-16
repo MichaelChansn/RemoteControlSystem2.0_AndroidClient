@@ -77,19 +77,19 @@ public class GameControlActivity extends Activity {
 		leftdown = (ImageButton) findViewById(R.id.imageButton_leftdown);
 		rightup = (ImageButton) findViewById(R.id.imageButton_rightup);
 		rightdown = (ImageButton) findViewById(R.id.imageButton_rightdown);
-		zhongjian = (ImageButton) findViewById(R.id.imageButton_zhingjian);
+		zhongjian = (ImageButton) findViewById(R.id.imageButton_leftmiddle);
 		A = (ImageButton) findViewById(R.id.imageButton_A);
 		B = (ImageButton) findViewById(R.id.imageButton_B);
 		C = (ImageButton) findViewById(R.id.imageButton_C);
 		D = (ImageButton) findViewById(R.id.imageButton_D);
-		leftmouse = (ImageButton) findViewById(R.id.imageButton_leftmouse);
+		leftmouse = (ImageButton) findViewById(R.id.imageButton_rightMiddle);
 		start = (ImageButton) findViewById(R.id.imageButton_start);
 		stop = (ImageButton) findViewById(R.id.imageButton_stop);
 
 		space = (ImageButton) findViewById(R.id.imageButton_space);
 		enter = (ImageButton) findViewById(R.id.ImageButton_enter);
 
-		jiasudu = (ImageButton) findViewById(R.id.imageButton_kaizhongli);
+		jiasudu = (ImageButton) findViewById(R.id.imageButton_gravity);
 		mySensorEventListener = new MySensorEventListener();// 这个监听器当然是我们自己定义的，在重力感
 															// 应器感应到手机位置有变化的时候，我们可以采取相应的操作，这里紧紧是将x,y,z的值打印出来
 		sensorManager = (SensorManager) this.getSystemService(SENSOR_SERVICE);
@@ -106,10 +106,10 @@ public class GameControlActivity extends Activity {
 				KSApplication.Vibrate(GameControlActivity.this, KSApplication.VIBRATETIME);
 				if (isopen == false) {
 					isopen = true;
-					jiasudu.setBackgroundResource(R.drawable.guanzhongli);
+					jiasudu.setBackgroundResource(R.drawable.button_close);
 				} else {
 					isopen = false;
-					jiasudu.setBackgroundResource(R.drawable.kaizhongli);
+					jiasudu.setBackgroundResource(R.drawable.button_open);
 				}
 
 			}
@@ -184,7 +184,7 @@ public class GameControlActivity extends Activity {
 			case R.id.imageButton_D:
 				key1 = SpecialKeys.GAME_D;
 				break;
-			case R.id.imageButton_zhingjian:
+			case R.id.imageButton_leftmiddle:
 				// TODO
 				isMouse = true;
 
@@ -196,7 +196,7 @@ public class GameControlActivity extends Activity {
 				}
 
 				break;
-			case R.id.imageButton_leftmouse:
+			case R.id.imageButton_rightMiddle:
 				// TODO
 				isMouse = true;
 				if ((event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_MOVE) {
@@ -246,7 +246,8 @@ public class GameControlActivity extends Activity {
 					break;
 				}
 			}
-			return true;
+			//normally,you should not return true,if you return true ,button selector is not work.you should let event gos next.
+			return false;
 		}
 
 	}
