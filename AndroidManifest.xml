@@ -33,7 +33,6 @@
         </activity>
         <activity
             android:name="com.ks.activitys.WelcomeActivity"
-            android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
             <intent-filter>
@@ -44,22 +43,18 @@
         </activity>
         <activity
             android:name="com.ks.activitys.IndexActivity"
-            android:launchMode="singleInstance"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.ks.activitys.MouseActivity"
-            android:launchMode="singleInstance"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.ks.activitys.GameControlActivity"
-            android:launchMode="singleInstance"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.ks.activitys.ControlPCActivity"
-            android:launchMode="singleInstance"
             android:screenOrientation="portrait" >
         </activity>
     </application>

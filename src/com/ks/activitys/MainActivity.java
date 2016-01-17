@@ -2,6 +2,7 @@ package com.ks.activitys;
 
 import java.lang.ref.WeakReference;
 
+import com.ks.application.KSApplication;
 import com.ks.application.R;
 import com.ks.net.NUMCODES.NETSTATE;
 import com.ks.net.TcpNet;
@@ -10,13 +11,19 @@ import com.ks.net.enums.MessageEnums.SpecialKeys;
 import com.ks.streamline.DecompressThread;
 import com.ks.streamline.RecoverAndDisplayThread;
 import com.ks.streamline.SendPacket;
+import com.ks.tools.ScreenTools;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -458,7 +465,14 @@ public class MainActivity extends Activity {
 		public void surfaceCreated(SurfaceHolder holder) {
 
 			System.out.println("created");
+			Canvas canvs = holder.lockCanvas();
+			canvs.drawColor(Color.WHITE);
+			Bitmap btm=((BitmapDrawable)getResources().getDrawable(R.drawable.error)).getBitmap();
+			ScreenTools tools=new ScreenTools(MainActivity.this);
+			canvs.drawBitmap(btm,(tools.getScreenWidth()-btm.getWidth())/2,(tools.getScreenHeight()-btm.getHeight())/2,null);
+			holder.unlockCanvasAndPost(canvs);
 			inits();
+			
 		}
 
 		@Override

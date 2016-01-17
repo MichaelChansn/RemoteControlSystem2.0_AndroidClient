@@ -14,15 +14,15 @@ public class WelcomeActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_welcome);
 		new Handler().postDelayed(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				  Intent intent=new Intent();
-				 intent.setClass(WelcomeActivity.this, IndexActivity.class);
-				 WelcomeActivity.this.startActivity(intent);
-				 WelcomeActivity.this.finish();
-				 WelcomeActivity.this.overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+				Intent intent = new Intent();
+				intent.setClass(WelcomeActivity.this, IndexActivity.class);
+				WelcomeActivity.this.startActivity(intent);
+				WelcomeActivity.this.finish();
+				WelcomeActivity.this.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 			}
 		}, 1000);
 	}

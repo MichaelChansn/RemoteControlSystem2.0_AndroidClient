@@ -1,5 +1,8 @@
 package com.ks.streamline;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -13,9 +16,14 @@ import com.ks.streamline.Recpacket.BitmapType;
 import com.ks.streamline.Recpacket.PacketType;
 import com.ks.testndk.JNIBtmProcess;
 
+import android.graphics.AvoidXfermode.Mode;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.view.SurfaceHolder;
 
 public class RecoverAndDisplayThread extends Thread {
