@@ -1,8 +1,5 @@
 package com.ks.streamline;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -16,14 +13,9 @@ import com.ks.streamline.Recpacket.BitmapType;
 import com.ks.streamline.Recpacket.PacketType;
 import com.ks.testndk.JNIBtmProcess;
 
-import android.graphics.AvoidXfermode.Mode;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.view.SurfaceHolder;
 
 public class RecoverAndDisplayThread extends Thread {
@@ -33,7 +25,7 @@ public class RecoverAndDisplayThread extends Thread {
 	private static Bitmap globalBtm;
 	private static Matrix matrix = new Matrix();
 	private static Matrix globalMatrix = new Matrix();
-	private Matrix displayMatrix = new Matrix();
+	private static Matrix displayMatrix = new Matrix();
 	private JNIBtmProcess jNIProcess = new JNIBtmProcess();
 	private boolean isRun = false;
 	private static float scale = (float) 1.0;
@@ -139,11 +131,13 @@ public class RecoverAndDisplayThread extends Thread {
 						SurfaceHolder holder = context.getSVHolder();
 						if (holder != null) {
 							Canvas canvs = holder.lockCanvas();
-							canvs.drawBitmap(globalBtm, displayMatrix, null);
-							canvs.drawBitmap(KSApplication.btmCursor,
-									(curPoint.getXPoint() * scale) + getMatrixBtmXPoint(), curPoint.getYPoint() * scale,
-									null);
-							holder.unlockCanvasAndPost(canvs);
+							if (canvs != null) {
+								canvs.drawBitmap(globalBtm, displayMatrix, null);
+								canvs.drawBitmap(KSApplication.btmCursor,
+										(curPoint.getXPoint() * scale) + getMatrixBtmXPoint(),
+										curPoint.getYPoint() * scale, null);
+								holder.unlockCanvasAndPost(canvs);
+							}
 
 						}
 
@@ -152,6 +146,7 @@ public class RecoverAndDisplayThread extends Thread {
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				isRun = false;
 				FileLogger.getLogger().write(e.getMessage());
 				break;
 				// tcpNet.disConnect();

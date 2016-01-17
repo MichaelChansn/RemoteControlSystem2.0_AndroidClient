@@ -16,8 +16,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnTouchListener;
+import android.view.Window;
 import android.widget.ImageButton;
 
 public class GameControlActivity extends Activity {

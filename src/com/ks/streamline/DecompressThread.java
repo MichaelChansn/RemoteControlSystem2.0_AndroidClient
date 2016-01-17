@@ -13,7 +13,6 @@ import com.ks.streamline.Recpacket.PacketType;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.BitmapFactory.Options;
 
 public class DecompressThread extends Thread {
 
@@ -84,7 +83,6 @@ public class DecompressThread extends Thread {
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				isRun=false;
 				FileLogger.getLogger().write(e.getMessage());
 				// tcpNet.disConnect();
 			}

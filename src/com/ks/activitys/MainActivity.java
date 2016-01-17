@@ -2,7 +2,6 @@ package com.ks.activitys;
 
 import java.lang.ref.WeakReference;
 
-import com.ks.application.KSApplication;
 import com.ks.application.R;
 import com.ks.net.NUMCODES.NETSTATE;
 import com.ks.net.TcpNet;
@@ -21,7 +20,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
