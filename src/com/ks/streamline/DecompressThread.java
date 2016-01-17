@@ -1,5 +1,7 @@
 package com.ks.streamline;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
@@ -39,6 +41,7 @@ public class DecompressThread extends Thread {
 		// TODO Auto-generated method stub
 		LZOjni lzo = new LZOjni();
 		byte[] deCompressBytes = new byte[512 * 1024];// 512kb buffer
+		ByteArrayInputStream byteInputStream = new ByteArrayInputStream(deCompressBytes);
 		int[] afterSize = new int[1];
 		while (isRun && !Thread.interrupted() && tcpNet.isConnecting()) {
 			// System.out.println("decompressThread*********************");
@@ -58,11 +61,15 @@ public class DecompressThread extends Thread {
 					byte[] dataBytes = rec.getBitByts();
 					int beforeSize = dataBytes.length;
 					lzo.LZODecompress(dataBytes, beforeSize, deCompressBytes, afterSize);
-					// long start=System.nanoTime();
-					Bitmap btm = BitmapFactory.decodeByteArray(deCompressBytes, 0, afterSize[0]);
+					// long start=System.nanoTime();//decode cost too much time
+					Bitmap btm = BitmapFactory.decodeStream(byteInputStream);
+					// Bitmap btm =
+					// BitmapFactory.decodeByteArray(deCompressBytes, 0,
+					// afterSize[0],opts);
 					// long stop=System.nanoTime();
 					// System.out.println((stop-start)/1000000);
 					difBtm.setDifBitmap(btm);
+					byteInputStream.reset();
 					difBtmQueue.put(difBtm);
 					break;
 				case TEXT:
@@ -77,9 +84,17 @@ public class DecompressThread extends Thread {
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				isRun=false;
 				FileLogger.getLogger().write(e.getMessage());
 				// tcpNet.disConnect();
 			}
+		}
+		try {
+			byteInputStream.close();
+			byteInputStream = null;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }

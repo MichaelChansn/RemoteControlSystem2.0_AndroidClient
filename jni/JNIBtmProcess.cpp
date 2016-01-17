@@ -134,5 +134,6 @@ JNIEXPORT void JNICALL Java_com_ks_testndk_JNIBtmProcess_getBitmapOrl(JNIEnv *en
 	    env->ReleaseIntArrayElements(points,carr,0);
 	    AndroidBitmap_unlockPixels(env, globalBtm);
 	    AndroidBitmap_unlockPixels(env, lastBtm);
+	    delete[] (uint32_t*)pixelsL;
 }
 

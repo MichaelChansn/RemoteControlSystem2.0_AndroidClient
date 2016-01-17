@@ -12,7 +12,6 @@ import com.ks.net.TcpNet;
 import com.ks.streamline.Recpacket.BitmapType;
 import com.ks.streamline.Recpacket.PacketType;
 import com.ks.testndk.JNIBtmProcess;
-import com.ks.tools.ScreenTools;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
