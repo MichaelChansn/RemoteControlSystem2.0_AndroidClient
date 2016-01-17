@@ -174,7 +174,7 @@ public class MouseActivity extends Activity {
 				onMouseMove(distanceX, distanceY);
 			}
 			if (e2.getPointerCount() == 2) {
-				onMiddleButtonMove(-(int) distanceY);
+				onMiddleButtonMove(-(int) (distanceY*1.4));
 			}
 			if (e2.getPointerCount() == 3) {
 

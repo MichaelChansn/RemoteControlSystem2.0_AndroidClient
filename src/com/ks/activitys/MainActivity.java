@@ -199,7 +199,6 @@ public class MainActivity extends Activity {
 			}
 		});
 		edSendText.addTextChangedListener(new TextWatcher() {
-		
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -207,7 +206,7 @@ public class MainActivity extends Activity {
 				System.out.println("onTextChanged得到的数据是：——>" + edSendText.getText().toString());
 
 			}
-			
+
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 				// TODO Auto-generated method stub
@@ -303,7 +302,7 @@ public class MainActivity extends Activity {
 		System.out.println("onshow");
 		speicalKeys.setAlpha(0);
 		speicalKeys.setVisibility(View.VISIBLE);
-		
+
 		speicalKeys.animate().alpha(1).setDuration(500).setListener(null).start();
 	}
 
@@ -465,24 +464,41 @@ public class MainActivity extends Activity {
 		public void surfaceCreated(SurfaceHolder holder) {
 
 			System.out.println("created");
-			Canvas canvs = holder.lockCanvas();
-			canvs.drawColor(Color.WHITE);
-			Bitmap btm=((BitmapDrawable)getResources().getDrawable(R.drawable.error)).getBitmap();
-			ScreenTools tools=new ScreenTools(MainActivity.this);
-			canvs.drawBitmap(btm,(tools.getScreenWidth()-btm.getWidth())/2,(tools.getScreenHeight()-btm.getHeight())/2,null);
-			holder.unlockCanvasAndPost(canvs);
-			inits();
-			
+			if (!tcpNet.isConnecting()) {
+				Canvas canvs = holder.lockCanvas();
+				canvs.drawColor(Color.WHITE);
+				Bitmap btm = ((BitmapDrawable) getResources().getDrawable(R.drawable.error)).getBitmap();
+				ScreenTools tools = new ScreenTools(MainActivity.this);
+				canvs.drawBitmap(btm, (tools.getScreenWidth() - btm.getWidth()) / 2,
+						(tools.getScreenHeight() - btm.getHeight()) / 2, null);
+				holder.unlockCanvasAndPost(canvs);
+			}
+			// inits();
+
 		}
 
 		@Override
 		public void surfaceDestroyed(SurfaceHolder holder) {
 
 			System.out.println("destoryed");
-			stopShowThreads();
+			// stopShowThreads();
 
 		}
 
+	}
+
+	@Override
+	protected void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+		inits();
+	}
+
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		stopShowThreads();
 	}
 
 	private class MyGestureListener extends SimpleOnGestureListener {
@@ -520,7 +536,7 @@ public class MainActivity extends Activity {
 				showThread.setMatrix(tmpMatrix);
 			}
 			if (e2.getPointerCount() == 2) {
-				onMiddleButtonMove(-(int) distanceY);
+				onMiddleButtonMove(-(int) (distanceY * 1.4));
 			}
 			if (e2.getPointerCount() == 3) {
 
@@ -658,11 +674,11 @@ public class MainActivity extends Activity {
 		TcpNet.getInstance().sendMessage(senPacket);
 
 	}
-	
+
 	@Override
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
-		//super.onBackPressed();
+		// super.onBackPressed();
 		tcpNet.ExitApp(MainActivity.this);
 	}
 
