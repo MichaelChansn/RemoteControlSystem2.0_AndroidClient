@@ -151,8 +151,7 @@ public class SpecialKeyLinstener implements OnClickListener {
 }
 
 /*
- * OnTouchListener {
- * 
+ *public class SpecialKeyLinstener implements OnTouchListener {
  * @Override public boolean onTouch(View v, MotionEvent event) { // TODO
  * Auto-generated method stub SpecialKeys key = null; switch (v.getId()) { case
  * R.id.button_Alt: key = SpecialKeys.ALT; break; case R.id.button_CapsLock: key
