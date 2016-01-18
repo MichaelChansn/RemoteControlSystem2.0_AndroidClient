@@ -16,6 +16,7 @@ import com.ks.testndk.JNIBtmProcess;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Point;
 import android.view.SurfaceHolder;
 
 public class RecoverAndDisplayThread extends Thread {
@@ -64,14 +65,56 @@ public class RecoverAndDisplayThread extends Thread {
 		return btmHeight;
 	}
 
-	public int getMatrixBtmXPoint() {
+	public Point getMatrixBtmPoint() {
 		float[] f = new float[9];
 		displayMatrix.set(matrix);
 		displayMatrix.postConcat(globalMatrix);
 		displayMatrix.getValues(f);
 		// 图片4个顶点的坐标
 		float x1 = f[0] * 0 + f[1] * 0 + f[2];
-		return (int) x1;
+		float y1 = f[3] * 0 + f[4] * 0 + f[5];
+		return new Point((int) x1, (int) y1);
+	}
+
+	public float[] getMatrixBtmAllPoints() {
+		float[] f = new float[9];
+		displayMatrix.set(matrix);
+		displayMatrix.postConcat(globalMatrix);
+		displayMatrix.getValues(f);
+		int width = getGlobalBtmWidth();
+		int height = getGlobalBtmHeight();
+		float x1 = f[0] * 0 + f[1] * 0 + f[2];
+		float y1 = f[3] * 0 + f[4] * 0 + f[5];
+		float x2 = f[0] * width + f[1] * 0 + f[2];
+		float y2 = f[3] * width + f[4] * 0 + f[5];
+		float x3 = f[0] * 0 + f[1] * height + f[2];
+		float y3 = f[3] * 0 + f[4] * height + f[5];
+		float x4 = f[0] * width + f[1] * height + f[2];
+		float y4 = f[3] * width + f[4] * height + f[5];
+		float[] retF = new float[8];
+		retF[0] = x1;
+		retF[1] = y1;
+		retF[2] = x2;
+		retF[3] = y2;
+		retF[4] = x3;
+		retF[5] = y3;
+		retF[6] = x4;
+		retF[7] = y4;
+		return retF;
+	}
+
+	public float getMatrixBtmScale() {
+		float[] f = new float[9];
+		displayMatrix.set(matrix);
+		displayMatrix.postConcat(globalMatrix);
+		displayMatrix.getValues(f);
+		int height = getGlobalBtmHeight();
+		float x1 = f[0] * 0 + f[1] * 0 + f[2];
+		float y1 = f[3] * 0 + f[4] * 0 + f[5];
+		float x3 = f[0] * 0 + f[1] * height + f[2];
+		float y3 = f[3] * 0 + f[4] * height + f[5];
+		double nowHeight = Math.sqrt((x1 - x3) * (x1 - x3) + (y1 - y3) * (y1 - y3));
+		return (float) (nowHeight / height);
 	}
 
 	@Override
@@ -126,6 +169,7 @@ public class RecoverAndDisplayThread extends Thread {
 				if (globalBtm != null) {
 					displayMatrix.set(matrix);
 					displayMatrix.postConcat(globalMatrix);
+					Point position = getMatrixBtmPoint();
 					final MainActivity context = (MainActivity) hander.getContext();
 					if (context != null) {
 						SurfaceHolder holder = context.getSVHolder();
@@ -134,8 +178,8 @@ public class RecoverAndDisplayThread extends Thread {
 							if (canvs != null) {
 								canvs.drawBitmap(globalBtm, displayMatrix, null);
 								canvs.drawBitmap(KSApplication.btmCursor,
-										(curPoint.getXPoint() * scale) + getMatrixBtmXPoint(),
-										curPoint.getYPoint() * scale, null);
+										(curPoint.getXPoint() * getMatrixBtmScale()) + position.x,
+										(curPoint.getYPoint() * getMatrixBtmScale()) + position.y, null);
 								holder.unlockCanvasAndPost(canvs);
 							}
 

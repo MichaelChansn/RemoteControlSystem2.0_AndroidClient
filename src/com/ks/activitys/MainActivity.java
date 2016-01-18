@@ -20,6 +20,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -101,6 +102,7 @@ public class MainActivity extends Activity {
 	// 手势识别
 	private GestureDetector gestureDetector;
 	private Matrix tmpMatrix = new Matrix();
+	private Matrix tmpMatrix2 = new Matrix();
 	private SpecialKeyLinstener specialKeyLinstener;
 
 	@Override
@@ -385,6 +387,22 @@ public class MainActivity extends Activity {
 
 	}
 
+	private float oldDist = 0f;
+	private PointF mid = new PointF();
+	private boolean isReduce = false;
+
+	private float spacing(MotionEvent event) {
+		float x = event.getX(0) - event.getX(1);
+		float y = event.getY(0) - event.getY(1);
+		return (float) Math.sqrt(x * x + y * y);
+	}
+
+	private void midPoint(PointF point, MotionEvent event) {
+		float x = event.getX(0) + event.getX(1);
+		float y = event.getY(0) + event.getY(1);
+		point.set(x / 2, y / 2);
+	}
+
 	private class svShowOnTouchListener implements OnTouchListener {
 
 		@Override
@@ -396,6 +414,10 @@ public class MainActivity extends Activity {
 			case MotionEvent.ACTION_POINTER_DOWN:
 				if (event.getPointerCount() == 3) {
 					MouseLeftDown();
+				}
+				if (event.getPointerCount() == 2) {
+					oldDist = spacing(event);
+					midPoint(mid, event);
 				}
 				startPoint.set(event.getX(), event.getY());
 				movePoint.set(event.getX(), event.getY());
@@ -417,12 +439,14 @@ public class MainActivity extends Activity {
 
 	private Matrix tmp = new Matrix();
 
-	public void limitMatrix(Matrix matrix) {
+	public boolean limitMatrix(Matrix matrix) {
 		tmp.reset();
 		tmp.setScale(showThread.getScale(), showThread.getScale());
 		tmp.postConcat(matrix);
 		int width = showThread.getGlobalBtmWidth();
 		int height = showThread.getGlobalBtmHeight();
+		int screenHeight = svShow.getHeight();
+		int screenWidth = svShow.getWidth();
 		float[] f = new float[9];
 		tmp.getValues(f);
 		// 图片4个顶点的坐标
@@ -434,19 +458,37 @@ public class MainActivity extends Activity {
 		float y3 = f[3] * 0 + f[4] * height + f[5];
 		float x4 = f[0] * width + f[1] * height + f[2];
 		float y4 = f[3] * width + f[4] * height + f[5];
-		// 打印图片现在参数
-		/*
-		 * System.out.println("坐标1："+x1+":"+y1);
-		 * System.out.println("坐标2："+x2+":"+y2);
-		 * System.out.println("坐标3："+x3+":"+y3);
-		 * System.out.println("坐标4："+x4+":"+y4);
-		 */
+
+		double nowHeight = Math.sqrt((x1 - x3) * (x1 - x3) + (y1 - y3) * (y1 - y3));
+		System.out.println("图片宽度：" + nowHeight);
+		// 缩放比率判断
+		if (nowHeight < screenHeight || nowHeight > screenHeight * 3) {
+			return false;
+		}
+
 		if (x1 > 0 || x3 > 0) {
 			matrix.postTranslate(-x1, 0);
+		}
+		if (y1 > 0 || y2 > 0) {
+			matrix.postTranslate(0, -y1);
 		}
 		if (x2 < svShow.getWidth() || x4 < svShow.getWidth()) {
 			matrix.postTranslate(-(x2 - svShow.getWidth()), 0);
 		}
+		if (y3 < svShow.getHeight() || y4 < svShow.getHeight()) {
+			matrix.postTranslate(0, -(y3 - svShow.getHeight()));
+		}
+		/*if (isReduce && ((nowHeight / screenHeight) < 1.05)) {
+			float scaleNormal = (float) (1.0 / (nowHeight / screenHeight));
+			matrix.postScale(scaleNormal, scaleNormal, mid.x, mid.y);
+		}*/
+		// 出界判断
+
+		/*
+		 * if (x1 > 0 || x2 < screenWidth || y1 > 0 || y3 < screenHeight) {
+		 * return false; }
+		 */
+		return true;
 	}
 
 	private class SurfaceViewCallback implements Callback {
@@ -519,8 +561,9 @@ public class MainActivity extends Activity {
 		@Override
 		public void onLongPress(MotionEvent e) {
 			// System.out.println("OnLongPressed Pressed");
-			setMousePos((int) ((e.getX() - showThread.getMatrixBtmXPoint()) / showThread.getScale()),
-					(int) (e.getY() / showThread.getScale()));
+			Point position = showThread.getMatrixBtmPoint();
+			setMousePos((int) ((e.getX() - position.x) / showThread.getMatrixBtmScale()),
+					(int) ((e.getY() - position.y) / showThread.getMatrixBtmScale()));
 			clickRightMouse();
 		}
 
@@ -529,12 +572,98 @@ public class MainActivity extends Activity {
 			// System.out.println("OnScroll Pressed" + ":" + distanceX + ":" +
 			// distanceY);
 			if (e2.getPointerCount() == 1) {
-				tmpMatrix.postTranslate(-distanceX, 0);
-				limitMatrix(tmpMatrix);
-				showThread.setMatrix(tmpMatrix);
+
+				float[] points = showThread.getMatrixBtmAllPoints();
+				int screenHeight = svShow.getHeight();
+				int screenWidth = svShow.getWidth();
+				float x1 = points[0];
+				float y1 = points[1];
+				float x2 = points[2];
+				float y3 = points[5];
+
+				if (x1 >= -0 && distanceX < 0)
+					distanceX = 0;
+				if (x2 <= (screenWidth + 0) && distanceX > 0)
+					distanceX = 0;
+				if (y1 >= -0 && distanceY < 0)
+					distanceY = 0;
+				if (y3 <= (screenHeight + 0) && distanceY > 0)
+					distanceY = 0;
+				/*
+				 * if ((!(x1 >= -1 && y1 >= -1)) && ((x1 >= -1) || (y1 >= -1)))
+				 * { if (x1 >= -1 && distanceX < 0) distanceX = 0; if (y1 >= -1
+				 * && distanceY < 0) distanceY = 0; } if ((!(x2 <= (screenWidth
+				 * + 1) && y2 >= -1)) && ((x2 <= 1 + screenWidth) || (y2 >=
+				 * -1))) { if (x2 <= (screenWidth+1) && distanceX > 0) distanceX
+				 * = 0; if (y2 >= -1 && distanceY < 0) distanceY = 0; } if
+				 * ((!(x3 >= -1 && y3 <= (screenHeight + 1))) && ((x3 >= -1) ||
+				 * (y3 <= (1 + screenHeight)))) { if (x3 >= -1 && distanceX < 0)
+				 * distanceX = 0; if (y3 <= (1 + screenHeight) && distanceY > 0)
+				 * distanceY = 0; } if ((!(x4 <= (screenWidth + 1) && y4 <=
+				 * (screenHeight + 1))) && ((x4 <= (screenWidth + 1)) || (y4 <=
+				 * (1 + screenHeight)))) { if (x4 <= (screenWidth + 1) &&
+				 * distanceX > 0) distanceX = 0; if (y4 >= (screenHeight + 1) &&
+				 * distanceY > 0) distanceY = 0; }
+				 */
+				tmpMatrix2.postTranslate(-distanceX, -distanceY);
+				if (limitMatrix(tmpMatrix2)) {
+					tmpMatrix.set(tmpMatrix2);
+					showThread.setMatrix(tmpMatrix);
+				} else {
+					tmpMatrix2.set(tmpMatrix);
+				}
 			}
 			if (e2.getPointerCount() == 2) {
-				onMiddleButtonMove(-(int) (distanceY * 1.4));
+				float newDis = spacing(e2);
+				if (Math.abs(newDis - oldDist) > 10f) {
+					float scale = newDis / oldDist;
+
+					if (scale <= 1.0f)// 缩小
+					{
+						isReduce = true;
+						float[] points = showThread.getMatrixBtmAllPoints();
+						int screenHeight = svShow.getHeight();
+						int screenWidth = svShow.getWidth();
+						float x1 = points[0];
+						float y1 = points[1];
+						float x2 = points[2];
+						float y3 = points[5];
+
+						/*
+						 * if (x1 >= -1 && y1 >= -1) { mid.x = 0; mid.y = 0; }
+						 * if (x3 >= -1 && y3 <= (1 + screenHeight)) { mid.x =
+						 * 0; mid.y = screenHeight; } if (x2 <= (1 +
+						 * screenWidth) && y2 >= -1) { mid.x = screenWidth;
+						 * mid.y = 0; } if (x4 <= (1 + screenWidth) && y4 <= (1
+						 * + screenHeight)) { mid.x = screenWidth; mid.y =
+						 * screenHeight; }
+						 */ if (x1 >= -0) {
+							mid.x = 0;
+						}
+						if (x2 <= (0 + screenWidth)) {
+							mid.x = screenWidth;
+						}
+						if (y1 >= -0) {
+							mid.y = 0;
+						}
+						if (y3 < (0 + screenHeight)) {
+							mid.y = screenHeight;
+						}
+					} else {
+						isReduce = false;
+					}
+					tmpMatrix2.postScale(scale, scale, mid.x, mid.y);
+					if (limitMatrix(tmpMatrix2)) {
+						tmpMatrix.set(tmpMatrix2);
+						showThread.setMatrix(tmpMatrix);
+					} else {
+						tmpMatrix2.set(tmpMatrix);
+					}
+
+				} else {
+					onMiddleButtonMove(-(int) (distanceY * 1.4));
+				}
+				oldDist = spacing(e2);
 			}
 			if (e2.getPointerCount() == 3) {
 
@@ -563,8 +692,9 @@ public class MainActivity extends Activity {
 		public boolean onSingleTapConfirmed(MotionEvent e) {
 			// System.out.println("onSingleTapConfirmed...");
 			if (e.getPointerCount() == 1) {
-				setMousePos((int) ((e.getX() - showThread.getMatrixBtmXPoint()) / showThread.getScale()),
-						(int) (e.getY() / showThread.getScale()));
+				Point position = showThread.getMatrixBtmPoint();
+				setMousePos((int) ((e.getX() - position.x) / showThread.getMatrixBtmScale()),
+						(int) ((e.getY() - position.y) / showThread.getMatrixBtmScale()));
 				clickLeftMouse();
 			}
 			return true;
@@ -580,8 +710,9 @@ public class MainActivity extends Activity {
 		public boolean onDoubleTap(MotionEvent e) {
 			// System.out.println("onDoubleTap...");
 			if (e.getPointerCount() == 1) {
-				setMousePos((int) ((e.getX() - showThread.getMatrixBtmXPoint()) / showThread.getScale()),
-						(int) (e.getY() / showThread.getScale()));
+				Point position = showThread.getMatrixBtmPoint();
+				setMousePos((int) ((e.getX() - position.x) / showThread.getMatrixBtmScale()),
+						(int) ((e.getY() - position.y) / showThread.getMatrixBtmScale()));
 				doubleClickLeftMouse();
 			}
 			return true;
