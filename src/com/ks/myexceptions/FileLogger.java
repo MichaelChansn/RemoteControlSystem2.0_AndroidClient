@@ -1,57 +1,74 @@
 package com.ks.myexceptions;
 
-import java.io.PrintStream;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Date;
 
 public class FileLogger {
 
-	
-	private static FileLogger loger=null;
-	private static String LOGEPATH="log.txt";
-	private static PrintStream logFile;
-	private static boolean isInitFileOK=false;
-	private FileLogger(){}
-	public static FileLogger getLogger()
-	{
-		if(loger==null)
-		{
-			synchronized(FileLogger.class)
-			{
-				if(loger==null)
-				{
-					loger=new FileLogger();
-					/*
+	private static FileLogger loger = null;
+	private static String FILENAME = "log.txt";
+	private static BufferedWriter logFile;
+	private static boolean isLogOn = true;
+	private static String FILEPATH = null;
+
+	private FileLogger() {
+	}
+
+	public static FileLogger getLogger() {
+		if (loger == null) {
+			synchronized (FileLogger.class) {
+				if (loger == null) {
+					loger = new FileLogger();
 					try {
-						String path=android.os.Environment.getExternalStorageDirectory().getPath();
-						logFile=new PrintStream(new FileOutputStream(path+File.separator+LOGEPATH, true));
-						isInitFileOK=true;
-					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
+						FILEPATH = android.os.Environment.getExternalStorageDirectory().getPath() + File.separator
+								+ FILENAME;
+					} catch (Exception e) {
 						e.printStackTrace();
-					}*/
+					}
 				}
 			}
 		}
 		return loger;
 	}
-	
-	public synchronized void write(String log)
+
+	public void logSwitch(boolean onOrOff)
 	{
-		/*
-		if(isInitFileOK)
-		{
-			logFile.println(new Date().toString()+"-->"+log);
-		}
-		else
-		{
-			throw new RuntimeException("the log file is not create success");
-		}
-		*/
+		isLogOn=onOrOff;
 	}
+	public synchronized void write(String log) {
+
+		if (isLogOn && FILEPATH!=null) {
+			try {
+				File file = new File(FILEPATH);
+				if (!file.exists()) {
+					file.createNewFile();
+				}
+				if(file.length()>1024*1024)
+				{
+					file.delete();
+					file.createNewFile();
+				}
+				logFile=new BufferedWriter(new FileWriter(file,true));
+				logFile.append(new Date().toString() + "-->" + log);
+				logFile.newLine();
+				logFile.flush();
+				logFile.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+		}
+
+	}
+
 	@Override
 	protected void finalize() throws Throwable {
 		// TODO Auto-generated method stub
 		super.finalize();
-		if(logFile!=null)
+		if (logFile != null)
 			logFile.close();
 	}
 
