@@ -139,7 +139,7 @@ public class ControlPCActivity extends Activity {
 				break;
 			case R.id.imageButton_confirm:
 				if (KSApplication.isSure) {
-					if (shutdowntime >= 0) {
+					if (shutdowntime > 0) {
 						sendFunMessage(MessageType.FUN_SHUTDOWN_TIME, (int) shutdowntime);
 						shutdownTime.setText("关机时机:" + lastCalender.get(Calendar.HOUR_OF_DAY) + ":"
 								+ lastCalender.get(Calendar.MINUTE) + "  总秒数:" + shutdowntime);
@@ -148,7 +148,7 @@ public class ControlPCActivity extends Activity {
 						KSApplication.isSure = false;
 					} else {
 						confirm.setImageResource(R.drawable.confirmshutdown);
-						Toast.makeText(ControlPCActivity.this, "不能早于当前时间，秒数未负数了", Toast.LENGTH_SHORT).show();
+						Toast.makeText(ControlPCActivity.this, "不能早于当前时间，秒数为负数了", Toast.LENGTH_SHORT).show();
 						KSApplication.isSure = true;
 					}
 				} else {
